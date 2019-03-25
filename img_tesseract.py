@@ -12,8 +12,8 @@ def extract_text(image_path, lang='eng'):
 
 
 def find_images_in(dir_path, img_type='jpg'):
-    os.chdir(dir_path)
+    files = [file for file in os.listdir(dir_path) if file.endswith(img_type)]
     images = []
-    for file in glob.glob(f"*.{img_type}"):
-        images.append(file)
+    for file in files:
+        images.append(os.path.join(dir_path, file))
     return images
