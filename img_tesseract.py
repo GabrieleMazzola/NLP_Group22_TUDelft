@@ -11,8 +11,8 @@ def extract_text(image_path, lang='eng'):
     return extracted_text if extracted_text else None
 
 
-def find_images_in(dir_path, img_type='jpg'):
-    files = [file for file in os.listdir(dir_path) if file.endswith(img_type)]
+def find_images_in(dir_path):
+    files = [file for file in os.listdir(dir_path) if file.endswith("png") or file.endswith("jpg")]
     images = []
     for file in files:
         images.append(os.path.join(dir_path, file))
