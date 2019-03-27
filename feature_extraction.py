@@ -16,7 +16,14 @@ features = pd.DataFrame(columns=['numCharPostTitle', 'numCharArticleTitle', 'num
                                  'diffArticleTitlePostImage', 'diffArticleDescArticleKeywords', 'diffArticleDescArticleParagraph',
                                  'diffArticleDescArticleCaption', 'diffArticleDescPostImage', 'diffArticleKeywordsArticleParagraph',
                                  'diffArticleKeywordsArticleCaption', 'diffArticleKeywordsPostImage', 'diffArticleParagraphArticleCaption',
-                                 'diffArticleParagraphPostImage', 'diffArticleCaptionPostImage'])
+                                 'diffArticleParagraphPostImage', 'diffArticleCaptionPostImage', 'ratioPostTitleArticleTitle',
+                                 'ratioPostTitleArticleDesc', 'ratioPostTitleArticleKeywords', 'ratioPostTitleArticleParagraph',
+                                 'ratioPostTitleArticleCaption', 'ratioPostTitlePostImage', 'ratioArticleTitleArticleDesc',
+                                 'ratioArticleTitleArticleKeywords', 'ratioArticleTitleArticleParagraph', 'ratioArticleTitleArticleCaption',
+                                 'ratioArticleTitlePostImage', 'ratioArticleDescArticleKeywords', 'ratioArticleDescArticleParagraph',
+                                 'ratioArticleDescArticleCaption', 'ratioArticleDescPostImage', 'ratioArticleKeywordsArticleParagraph',
+                                 'ratioArticleKeywordsArticleCaption', 'ratioArticleKeywordsPostImage', 'ratioArticleParagraphArticleCaption',
+                                 'ratioArticleParagraphPostImage', 'ratioArticleCaptionPostImage'])
 
 for index, row in instances.iterrows():
     ### NUMBER OF CHARACTERS
@@ -24,6 +31,7 @@ for index, row in instances.iterrows():
     lenArtTitle = len(row['targetTitle'])
     lenArtDesc = len(row['targetDescription'])
     lenArtKeywords = len(row['targetKeywords'])
+    print(len(row['postText'][0].split()))
     features_dict = {}
     features_dict['numCharPostTitle'] = [lenPostTitle]
     # MISSING THE NUMBER OF CHARACTERS FROM POST'S IMAGE
@@ -41,10 +49,7 @@ for index, row in instances.iterrows():
         lenArtPar = lenArtPar + len(paragraph)
     features_dict['numCharArticleParagraph'] = [lenArtPar]
 
-    # 'diffArticleKeywordsArticleParagraph',
-    # 'diffArticleKeywordsArticleCaption', 'diffArticleKeywordsPostImage', 'diffArticleParagraphArticleCaption',
-    # 'diffArticleParagraphPostImage', 'diffArticleCaptionPostImage'])
-
+    ### DIFFERENCE IN CHARACTERS - STILL TO DO THE CHECK OF THE ZERO CHARACTER CASE
     features_dict['diffPostTitleArticleTitle'] = [abs(lenPostTitle-lenArtTitle)]
     features_dict['diffPostTitleArticleDesc'] = [abs(lenPostTitle-lenArtDesc)]
     features_dict['diffPostTitleArticleKeywords'] = [abs(lenPostTitle-lenArtKeywords)]
@@ -65,11 +70,36 @@ for index, row in instances.iterrows():
     # STILL MISSING features_dict['diffArticleKeywordsPostImage'] = [abs(lenArtKeywords-lenPostImage)]
     features_dict['diffArticleParagraphArticleCaption'] = [abs(lenArtPar-lenArtCap)]
     # STILL MISSING features_dict['diffArticleParagraphPostImage'] = [abs(lenArtPar-lenPostImage)]
-    #features_dict['diffArticleCaptionPostImage'] = [abs(lenArtCap-lenPostImage)]
+    # STILL MISSING features_dict['diffArticleCaptionPostImage'] = [abs(lenArtCap-lenPostImage)]
+
+
+    ### RATIO IN CHARACTERS - STILL TO DO THE CHECK OF THE ZERO CHARACTER CASE
+    features_dict['ratioPostTitleArticleTitle'] = [1/abs(lenPostTitle/lenArtTitle)]
+    features_dict['ratioPostTitleArticleDesc'] = [1/abs(lenPostTitle/lenArtDesc)]
+    features_dict['ratioPostTitleArticleKeywords'] = [1/abs(lenPostTitle/lenArtKeywords)]
+    features_dict['ratioPostTitleArticleParagraph'] = [1/abs(lenPostTitle/lenArtPar)]
+    features_dict['ratioPostTitleArticleCaption'] = [1/abs(lenPostTitle/lenArtCap)]
+    # STILL MISSING features_dict['ratioPostTitlePostImage'] = [1/abs(lenPostTitle/lenPostImage)]
+    features_dict['ratioArticleTitleArticleDesc'] = [1/abs(lenArtTitle/lenArtDesc)]
+    features_dict['ratioArticleTitleArticleKeywords'] = [1/abs(lenArtTitle/lenArtKeywords)]
+    features_dict['ratioArticleTitleArticleParagraph'] = [1/abs(lenArtTitle/lenArtPar)]
+    features_dict['ratioArticleTitleArticleCaption'] = [1/abs(lenArtTitle/lenArtCap)]
+    # STILL MISSING features_dict['diffArticleTitlePostImage'] = [1/abs(lenArtTitle-lenPostImage)]
+    features_dict['ratioArticleDescArticleParagraph'] = [1/abs(lenArtDesc/lenArtPar)]
+    features_dict['ratioArticleDescArticleKeywords'] = [1/abs(lenArtDesc/lenArtKeywords)]
+    features_dict['ratioArticleDescArticleCaption'] = [1/abs(lenArtDesc/lenArtCap)]
+    # STILL MISSING features_dict['ratioArticleDescPostImage'] = [1/abs(lenArtDesc/lenPostImage)]
+    features_dict['ratioArticleKeywordsArticleParagraph'] = [1/abs(lenArtKeywords/lenArtPar)]
+    features_dict['ratioArticleKeywordsArticleCaption'] = [1/abs(lenArtKeywords/lenArtCap)]
+    # STILL MISSING features_dict['ratioArticleKeywordsPostImage'] = [1/abs(lenArtKeywords/lenPostImage)]
+    features_dict['ratioArticleParagraphArticleCaption'] = [1/abs(lenArtPar/lenArtCap)]
+    # STILL MISSING features_dict['ratioArticleParagraphPostImage'] = [1/abs(lenArtPar/lenPostImage)]
+    # features_dict['ratioArticleCaptionPostImage'] = [1/abs(lenArtCap/lenPostImage)]
+
+
+    ### NUMBER OF WORDS
+
 
     features = features.append(pd.DataFrame.from_dict(features_dict), ignore_index=True)
-
-
-    ### DIFFERENCE OF CHARACTERS
 
 print(features)
