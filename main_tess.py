@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from img_tesseract import extract_text, find_images_in
 
-DICT_PATH = './extracted_texts.pickle'
+DICT_PATH = './image_texts.pickle'
 IMAGE_TEXT_CHAR_THRES = 10
 
 
