@@ -4,32 +4,41 @@ import itertools
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet_ic
 from nltk.corpus import wordnet as wn
-from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
+from nltk.tag import StanfordNERTagger
 
+st = StanfordNERTagger(
+    '/home/esilezz/Scrivania/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
+    '/home/esilezz/Scrivania/stanford-ner-2018-10-16/stanford-ner.jar',
+    encoding='utf-8')
 
-def stem_string(filtered_sentence):
-    ps = PorterStemmer()
-    return [ps.stem(item) for item in filtered_sentence]
+def ner_stanford(string_sentence):
+    tokenized_text = word_tokenize(string_sentence)
+    classified_text = st.tag(tokenized_text)
+    filtered = []
+    for tup in classified_text:
+        if tup[1] == 'ORGANIZATION' or tup[1] == 'PERSON' or tup[1] == 'LOCATION':
+            
+    print("wait")
 
 
 def clean_string(sentence):
+    ner_stanford(sentence)
     stop_words = set(stopwords.words('english'))
-
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     word_tokens = word_tokenize(sentence)
     filtered_sentence = [w for w in word_tokens if not w in stop_words]
-    filtered_sentence = []
-    for w in word_tokens:
-        if w not in stop_words:
-            filtered_sentence.append(w)
+    # filtered_sentence = []
+    # for w in word_tokens:
+    #     if w not in stop_words:
+    #         filtered_sentence.append(w)
     return filtered_sentence
 
 
 def avg_similarity(sentence):
     semcor_ic = wordnet_ic.ic('ic-semcor.dat')
     filtered_sentence = clean_string(sentence)
-    # filtered_sentence = stem_string(filtered_sentence)
     combi = set(itertools.combinations(filtered_sentence, 2))
     sum = 0
     for tup in combi:
