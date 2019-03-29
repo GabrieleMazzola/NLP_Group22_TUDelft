@@ -5,7 +5,7 @@ import nltk
 from gabry_dataset_parser import get_labeled_instances
 
 
-def generate_pos_features(sentence, ner_tagger, possible_tags):
+def generate_pos_features(sentence, ner_tagger, possible_tags, normalize):
     tokenized_text = nltk.word_tokenize(sentence)
     classified_text = ner_tagger.tag(tokenized_text)
 
@@ -19,6 +19,9 @@ def generate_pos_features(sentence, ner_tagger, possible_tags):
     #print(count)
     sentence_tags = list(count.keys())
     sentence_counts = [count[tag] for tag in sentence_tags]
+
+    if normalize:
+        sentence_counts = [100*elem/sum(sentence_counts) for elem in sentence_counts]
 
     sentence_features = []
     for tag in possible_tags:
@@ -34,7 +37,7 @@ def generate_pos_features(sentence, ner_tagger, possible_tags):
 if __name__ == '__main__':
     print("Generating POS features... it might take a while :P")
 
-    FEATURES_DATA_PATH = r"../features/pos_features.pickle"
+    FEATURES_DATA_PATH = r"../features/pos_features_small_dataset_NER-lowercasing_normalized.json"
 
     labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
                                               "../train_set/truth_converted.pickle")
@@ -51,13 +54,13 @@ if __name__ == '__main__':
     features = []
     for idx, txt in enumerate(texts, 1):
         print(f"Computing features for sample {idx} out of {len(texts)}...")
-        features.append(generate_pos_features(txt, tagger, possible_tags))
+        features.append(generate_pos_features(txt, tagger, possible_tags, normalize=True))
 
     data_to_df = [tuple([ids[i]] + features[i]) for i in range(len(ids))]
     labels = ['id'] + ["pos_feat_" + tag for tag in possible_tags]
 
     df = pd.DataFrame.from_records(data_to_df, columns=labels)
 
-    df.to_json("../features/pos_features_small_dataset_NER-lowercasing.json", orient='records')
+    df.to_json(FEATURES_DATA_PATH, orient='records')
 
     print("Generation of POS features completed, phuff!")
