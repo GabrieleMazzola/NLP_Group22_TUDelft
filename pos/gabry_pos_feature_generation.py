@@ -1,9 +1,11 @@
 from collections import Counter
-
+import pandas as pd
 import nltk
 
+from gabry_dataset_parser import get_labeled_instances
 
-def generate_pos_features(sentence, ner_tagger, tagset):
+
+def generate_pos_features(sentence, ner_tagger, possible_tags):
     tokenized_text = nltk.word_tokenize(sentence)
     classified_text = ner_tagger.tag(tokenized_text)
 
@@ -14,10 +16,10 @@ def generate_pos_features(sentence, ner_tagger, tagset):
 
     count = Counter([j for i, j in tagging])
 
+    #print(count)
     sentence_tags = list(count.keys())
     sentence_counts = [count[tag] for tag in sentence_tags]
 
-    possible_tags = list(tagset.keys())
     sentence_features = []
     for tag in possible_tags:
         try:
@@ -26,6 +28,36 @@ def generate_pos_features(sentence, ner_tagger, tagset):
         except Exception:
             sentence_features.append(0)  # tag not found in sentence --> 0
 
-    print(list(zip(possible_tags, sentence_features)))
-
     return sentence_features
+
+
+if __name__ == '__main__':
+    print("Generating POS features... it might take a while :P")
+
+    FEATURES_DATA_PATH = r"../features/pos_features.pickle"
+
+    labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
+                                              "../train_set/truth_converted.pickle")
+
+    tagger = nltk.StanfordNERTagger('../ner/english.all.3class.distsim.crf.ser.gz',
+                                    '../ner/stanford-ner.jar',
+                                    encoding='utf-8')
+
+    tagset = nltk.load("help/tagsets/upenn_tagset.pickle")
+    possible_tags = list(tagset.keys())
+
+    ids = list(labeled_instances.id)
+    texts = [txt[0] for txt in list(labeled_instances.postText)]
+    features = []
+    for idx, txt in enumerate(texts, 1):
+        print(f"Computing features for sample {idx} out of {len(texts)}...")
+        features.append(generate_pos_features(txt, tagger, possible_tags))
+
+    data_to_df = [tuple([ids[i]] + features[i]) for i in range(len(ids))]
+    labels = ['id'] + ["pos_feat_" + tag for tag in possible_tags]
+
+    df = pd.DataFrame.from_records(data_to_df, columns=labels)
+
+    df.to_json("../features/pos_features_small_dataset_NER-lowercasing.json", orient='records')
+
+    print("Generation of POS features completed, phuff!")
