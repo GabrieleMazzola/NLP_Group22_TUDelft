@@ -5,14 +5,9 @@ import itertools
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet_ic
 from nltk.corpus import wordnet as wn
-from nltk.tokenize import word_tokenize
-from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 stop_words = set(stopwords.words('english'))
 stop_words.add('\'s')
@@ -22,6 +17,24 @@ st = StanfordNERTagger(
     '/home/esilezz/Scrivania/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
     '/home/esilezz/Scrivania/stanford-ner-2018-10-16/stanford-ner.jar',
     encoding='utf-8')
+
+semcor_ic = wordnet_ic.ic('ic-semcor.dat')
+general_phrases = ['RT', "'s", "'re", "u"]
+
+
+def count_capital(sentence):
+    tokenized_text = word_tokenize(sentence)
+    classified_text = st.tag(tokenized_text)
+    filtered = []
+    for tup in classified_text:
+        if tup[1] != 'O':
+            filtered.append(tup[0].lower())
+        else:
+            filtered.append(tup[0])
+    capital = 0
+    for word in filtered:
+        capital = capital + sum(1 for c in word if c.isupper())
+    return capital
 
 
 def count_determiners(sentence):
@@ -43,11 +56,6 @@ def ner_stanford(sentence):
         if tup[1] != 'PERSON' and tup[1] != 'ORGANIZATION' and tup[1] != 'LOCATION' and tup[0] not in general_phrases:
             filtered.append(tup[0])
     return filtered
-
-
-semcor_ic = wordnet_ic.ic('ic-semcor.dat')
-
-general_phrases = ['RT', "'s", "'re", "u"]
 
 
 def list_to_string(filtered_sentence):
@@ -154,7 +162,7 @@ for index, row in instances.iterrows():
     print("processing " + str(index) + " out of " + str(instances.shape[0]) + ": " + row['postText'][0])
     char_based_features(row, features_dict)
     features_dict['avgSimilarityPostTitle'] = avg_similarity(row['postText'][0])
-    features_dict['capitalPostTitle'] = sum(1 for c in row['postText'][0] if c.isupper())
+    features_dict['capitalPostTitle'] = count_capital(row['postText'][0])
     features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
     features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
     features_dict['numDeterminers'] = count_determiners(row['postText'][0])
@@ -164,27 +172,27 @@ features.to_csv("./features_matteo.csv", index=False)
 print("mannaccia il cristo appeso")
 print(features)
 
-click_det = 0
-no_click_det = 0
-
-click = 0
-no_click = 0
-
-for index, row in instances.iterrows():
-    if row['class'] == 'clickbait':
-        click = click + 1
-        if count_determiners(row['postText'][0]) > 0:
-            click_det = click_det + 1
-        else:
-            no_click_det = no_click_det + 1
-    else:
-        no_click = no_click + 1
-
-print("Number of clickbait articles: " + str(click))
-print("Number of non-clickbait articles: " + str(no_click))
-
-print("Number of clickbait articles with determiners: " + str(click_det))
-print("Number of non-clickbait articles with determiners: " + str(no_click_det))
-print("\n")
-print("Percentage of clickbait articles with determiners: " + str((click_det) / click))
-print("Percentage of non-clickbait articles with determiners: " + str((no_click_det) / no_click))
+# click_det = 0
+# no_click_det = 0
+#
+# click = 0
+# no_click = 0
+#
+# for index, row in instances.iterrows():
+#     if row['class'] == 'clickbait':
+#         click = click + 1
+#         if count_determiners(row['postText'][0]) > 0:
+#             click_det = click_det + 1
+#         else:
+#             no_click_det = no_click_det + 1
+#     else:
+#         no_click = no_click + 1
+#
+# print("Number of clickbait articles: " + str(click))
+# print("Number of non-clickbait articles: " + str(no_click))
+#
+# print("Number of clickbait articles with determiners: " + str(click_det))
+# print("Number of non-clickbait articles with determiners: " + str(no_click_det))
+# print("\n")
+# print("Percentage of clickbait articles with determiners: " + str((click_det) / click))
+# print("Percentage of non-clickbait articles with determiners: " + str((no_click_det) / no_click))
