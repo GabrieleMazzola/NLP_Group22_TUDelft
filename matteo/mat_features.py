@@ -19,9 +19,28 @@ st = StanfordNERTagger(
     encoding='utf-8')
 
 semcor_ic = wordnet_ic.ic('ic-semcor.dat')
-general_phrases = ['RT', "'s", "'re", "u"]
+general_phrases = ['RT', "'s", "'re", "u", 'http', 'https']
+with open("matteo/common_phrases.txt") as f:
+    content = f.readlines()
+# you may also want to remove whitespace characters like `\n` at the end of each line
+common_phrases = [x.strip() for x in content]
 
 
+def check(string, sub_str):
+    if string.find(sub_str) == -1:
+        return 0
+    else:
+        return 1
+
+
+def common(sentence):
+    res = 0
+    for phrase in common_phrases:
+        res = check(sentence, phrase)
+        if res == 1:
+            print("DEEEEE CRII")
+            return res
+    return res
 
 
 def count_capital(sentence):
@@ -39,10 +58,6 @@ def count_capital(sentence):
     return [capital/len(tokenized_text), len(tokenized_text)]
 
 
-def count_words(sentence):
-    return len(word_tokenize(sentence))
-
-
 def count_determiners(sentence):
     text = word_tokenize(sentence)
     text = [w.lower() for w in text]
@@ -52,6 +67,14 @@ def count_determiners(sentence):
         if tup[1] == 'DT':
             count = count + 1
     return count
+
+
+def pre_process(sentence):
+    filtered = []
+    for word in sentence.split():
+        if word[0] != '@' and word[0] != '#' and word not in general_phrases:
+            filtered.append(word)
+    return list_to_string(filtered)
 
 
 def ner_stanford(sentence):
@@ -73,7 +96,7 @@ def list_to_string(filtered_sentence):
 
 def lemmatize_string(filtered_sentence):
     lemmatizer = WordNetLemmatizer()
-    return [lemmatizer.lemmatize(word) for word in filtered_sentence]
+    return [lemmatizer.lemmatize(word, pos="v") for word in filtered_sentence]
 
 
 def clean_string(sentence):
@@ -89,17 +112,18 @@ def clean_string(sentence):
 
 def final_check(list_of_words):
     for word in list_of_words:
-        if not (word.isalpha()) or len(word) < 2:
+        if not (word.isalpha()) or len(word) <= 2:
             list_of_words.remove(word)
     return list_of_words
 
 
 def avg_similarity(sentence):
-    filtered_sentence = ner_stanford(sentence)
+    without_hash = pre_process(sentence)
+    filtered_sentence = ner_stanford(without_hash)
     filtered_sentence = clean_string(list_to_string(filtered_sentence))
     filtered_sentence = lemmatize_string(filtered_sentence)
     final_sentence = final_check(filtered_sentence)
-    print(final_sentence)
+    final_sentence = list(dict.fromkeys(final_sentence))
     combi = set(itertools.combinations(final_sentence, 2))
     sum = 0
     for tup in combi:
@@ -133,9 +157,7 @@ def char_based_features(row, features_dict):
     lenArtTitle = len(row['targetTitle'])
     lenArtDesc = len(row['targetDescription'])
     lenArtKeywords = len(row['targetKeywords'])
-    # print(len(row['postText'][0].split()))
     features_dict['numCharPostTitle'] = lenPostTitle
-    # MISSING THE NUMBER OF CHARACTERS FROM POST'S IMAGE
     features_dict['numCharArticleTitle'] = lenArtTitle
     features_dict['numCharArticleDescr'] = lenArtDesc
     features_dict['numCharArticleKeywords'] = lenArtKeywords
@@ -151,33 +173,37 @@ def char_based_features(row, features_dict):
     features_dict['numCharArticleParagraph'] = lenArtPar
 
 
-truth = pd.read_json("train_set/truth.json")
-instances = pd.read_json("train_set/instances.json")
+truth = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/truth.json")
+instances = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/instances.json")
 
 instances['class'] = truth['truthClass']
 
 # id postText postTimestamp postMedia targetTitle targetDescription targetKeywords targetParagraphs targetCaptions
-cols = [# 'numCharPostTitle', 'numCharArticleTitle', 'numCharArticleDescr', 'numCharArticleKeywords',
-        # 'numCharArticleCaption', 'numCharArticleParagraph', 'avgSimilarityPostTitle', 'capitalPostTitle',
-        # 'avgWordLenPostTitle', 'avgWordLenArticleTitle',
-    'capitalPostTitle', 'numWords']
+cols = ['id', 'numCharPostTitle', 'numCharArticleTitle', 'numCharArticleDescr', 'numCharArticleKeywords',
+        'numCharArticleCaption', 'numCharArticleParagraph', 'avgSimilarityPostTitle',
+        'avgWordLenPostTitle', 'avgWordLenArticleTitle', 'capitalPostTitle', 'numWords', 'commonPhrase']
 
 features = pd.DataFrame(columns=cols)
 
 for index, row in instances.iterrows():
     features_dict = {}
     print("processing " + str(index) + " out of " + str(instances.shape[0]) + ": " + row['postText'][0])
-    # char_based_features(row, features_dict)
-    # features_dict['avgSimilarityPostTitle'] = avg_similarity(row['postText'][0])
-    # features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
-    # features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
+    features_dict['id'] = row['id']
+    char_based_features(row, features_dict)
+    if index == 4:
+        print("mannaccia la chiesa")
+        print("porcoddi")
+    features_dict['avgSimilarityPostTitle'] = avg_similarity(row['postText'][0])
+    features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
+    features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
     capital_plus_nwords = count_capital(row['postText'][0])
     features_dict['capitalPostTitle'] = capital_plus_nwords[0]
     features_dict['numWords'] = capital_plus_nwords[1]
+    features_dict['commonPhrase'] = common(row['postText'][0])
 
     features = features.append(features_dict, ignore_index=True)
 
-features.to_csv("./new_features.csv", index=False)
+features.to_csv("./matteo_features.csv", index=False)
 print("mannaccia il cristo appeso")
 print(features)
 
