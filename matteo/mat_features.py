@@ -22,6 +22,8 @@ semcor_ic = wordnet_ic.ic('ic-semcor.dat')
 general_phrases = ['RT', "'s", "'re", "u"]
 
 
+
+
 def count_capital(sentence):
     tokenized_text = word_tokenize(sentence)
     classified_text = st.tag(tokenized_text)
@@ -34,7 +36,11 @@ def count_capital(sentence):
     capital = 0
     for word in filtered:
         capital = capital + sum(1 for c in word if c.isupper())
-    return capital
+    return [capital/len(tokenized_text), len(tokenized_text)]
+
+
+def count_words(sentence):
+    return len(word_tokenize(sentence))
 
 
 def count_determiners(sentence):
@@ -151,24 +157,27 @@ instances = pd.read_json("train_set/instances.json")
 instances['class'] = truth['truthClass']
 
 # id postText postTimestamp postMedia targetTitle targetDescription targetKeywords targetParagraphs targetCaptions
-cols = ['numCharPostTitle', 'numCharArticleTitle', 'numCharArticleDescr', 'numCharArticleKeywords',
-        'numCharArticleCaption', 'numCharArticleParagraph', 'avgSimilarityPostTitle', 'capitalPostTitle',
-        'avgWordLenPostTitle', 'avgWordLenArticleTitle', 'numDeterminers']
+cols = [# 'numCharPostTitle', 'numCharArticleTitle', 'numCharArticleDescr', 'numCharArticleKeywords',
+        # 'numCharArticleCaption', 'numCharArticleParagraph', 'avgSimilarityPostTitle', 'capitalPostTitle',
+        # 'avgWordLenPostTitle', 'avgWordLenArticleTitle',
+    'capitalPostTitle', 'numWords']
 
 features = pd.DataFrame(columns=cols)
 
 for index, row in instances.iterrows():
     features_dict = {}
     print("processing " + str(index) + " out of " + str(instances.shape[0]) + ": " + row['postText'][0])
-    char_based_features(row, features_dict)
-    features_dict['avgSimilarityPostTitle'] = avg_similarity(row['postText'][0])
-    features_dict['capitalPostTitle'] = count_capital(row['postText'][0])
-    features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
-    features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
-    features_dict['numDeterminers'] = count_determiners(row['postText'][0])
+    # char_based_features(row, features_dict)
+    # features_dict['avgSimilarityPostTitle'] = avg_similarity(row['postText'][0])
+    # features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
+    # features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
+    capital_plus_nwords = count_capital(row['postText'][0])
+    features_dict['capitalPostTitle'] = capital_plus_nwords[0]
+    features_dict['numWords'] = capital_plus_nwords[1]
+
     features = features.append(features_dict, ignore_index=True)
 
-features.to_csv("./features_matteo.csv", index=False)
+features.to_csv("./new_features.csv", index=False)
 print("mannaccia il cristo appeso")
 print(features)
 
