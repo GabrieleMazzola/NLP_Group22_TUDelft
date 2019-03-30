@@ -3,6 +3,7 @@ import numpy as np
 from sklearn import preprocessing
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
 
 
 from gabry_dataset_parser import get_labeled_instances
@@ -40,8 +41,8 @@ print(f"Kept only features columns. Shape: {feat_df.shape}")
 
 print(list(feat_df.columns))
 
-model = MultinomialNB()
-scores = cross_val_score(model, feat_df, label_encoded, cv=10)
+model = LogisticRegression(solver='liblinear')
+scores = cross_val_score(model, feat_df, label_encoded, cv=50)
 print(np.mean(scores), np.std(scores))
 
 df_to_visualize = np.vstack([feat_df.columns, feat_df.values])
