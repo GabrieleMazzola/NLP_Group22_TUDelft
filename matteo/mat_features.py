@@ -203,7 +203,7 @@ for index, row in instances.iterrows():
 
     features = features.append(features_dict, ignore_index=True)
 
-features.to_csv("./new_features.csv", index=False)
+features.to_csv("./matteo_features.csv", index=False)
 print("mannaccia il cristo appeso")
 print(features)
 
