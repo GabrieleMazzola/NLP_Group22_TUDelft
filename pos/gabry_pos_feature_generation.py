@@ -37,7 +37,7 @@ def generate_pos_features(sentence, ner_tagger, possible_tags, normalize):
 if __name__ == '__main__':
     print("Generating POS features... it might take a while :P")
 
-    FEATURES_DATA_PATH = r"../features/pos_features_small_postText_NER-lowercasing_normalized.csv"
+    FEATURES_DATA_PATH = r"../features/pos_features_small_targetTitle_NER-lowercasing_normalized.csv"
 
     labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
                                               "../train_set/truth_converted.pickle")
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     possible_tags = list(tagset.keys())
 
     ids = list(labeled_instances.id)
-    texts = [txt[0] for txt in list(labeled_instances.postText)]
+    texts = [txt for txt in list(labeled_instances.targetTitle)]
     features = []
     for idx, txt in enumerate(texts, 1):
         print(f"Computing features for sample {idx} out of {len(texts)}...")
