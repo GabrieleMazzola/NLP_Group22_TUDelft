@@ -21,7 +21,7 @@ def generate_pos_features(sentence, ner_tagger, possible_tags, normalize):
     sentence_counts = [count[tag] for tag in sentence_tags]
 
     if normalize:
-        sentence_counts = [100*elem/sum(sentence_counts) for elem in sentence_counts]
+        sentence_counts = [round(100*elem/sum(sentence_counts),2) for elem in sentence_counts]
 
     sentence_features = []
     for tag in possible_tags:
@@ -36,8 +36,17 @@ def generate_pos_features(sentence, ner_tagger, possible_tags, normalize):
 
 if __name__ == '__main__':
 
-    FEATURES_DATA_PATH = r"../features/pos_features_small_postText_NER-lowercasing_no-normalized.csv"
-    print(f"Generating POS features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}'")
+    # TODO: postText    normalized      --> Running
+    # TODO: postText    no-normalized   --> TODO
+    # TODO: targetTitle normalized      --> TODO
+    # TODO: targetTitle no-normalized   --> TODO
+
+    target = "postText"  # "postText" or "targetTitle"
+    prefix = "PT" if target == "postText" else "TA"
+    NORMALIZE = True
+
+    FEATURES_DATA_PATH = r"../features/pos_features_small_{}_{}.csv".format(target, 'normalized' if NORMALIZE else "no-normalized")
+    print(f"Generating POS features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")
 
     labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
                                               "../train_set/truth_converted.pickle")
@@ -50,14 +59,17 @@ if __name__ == '__main__':
     possible_tags = list(tagset.keys())
 
     ids = list(labeled_instances.id)
-    texts = [txt[0] for txt in list(labeled_instances.postText)]
+    if target == 'postText':
+        texts = [txt[0] for txt in list(labeled_instances.postText)]
+    else:
+        texts = [txt for txt in list(labeled_instances.targetTitle)]
     features = []
     for idx, txt in enumerate(texts, 1):
         print(f"Computing features for sample {idx} out of {len(texts)}...")
-        features.append(generate_pos_features(txt, tagger, possible_tags, normalize=True))
+        features.append(generate_pos_features(txt, tagger, possible_tags, normalize=NORMALIZE))
 
     data_to_df = [tuple([ids[i]] + features[i]) for i in range(len(ids))]
-    labels = ['id'] + ["pos_feat_" + tag for tag in possible_tags]
+    labels = ['id'] + [prefix + "_pos_feat_" + tag for tag in possible_tags]
 
     df = pd.DataFrame.from_records(data_to_df, columns=labels)
 
