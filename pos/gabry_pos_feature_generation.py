@@ -36,20 +36,21 @@ def generate_pos_features(sentence, ner_tagger, possible_tags, normalize):
 
 if __name__ == '__main__':
 
-    # TODO: postText    normalized      --> Running
-    # TODO: postText    no-normalized   --> TODO
-    # TODO: targetTitle normalized      --> TODO
-    # TODO: targetTitle no-normalized   --> TODO
+    # TODO: postText    normalized      --> Done
+    # TODO: postText    no-normalized   --> Done
+    # TODO: targetTitle normalized      --> Done
+    # TODO: targetTitle no-normalized   --> Done
 
-    target = "postText"  # "postText" or "targetTitle"
+    DATASET = 'small'  # 'small' or 'big'
+    target = "targetTitle"  # "postText" or "targetTitle"
     prefix = "PT" if target == "postText" else "TA"
-    NORMALIZE = True
+    NORMALIZE = False
 
-    FEATURES_DATA_PATH = r"../features/pos_features_small_{}_{}.csv".format(target, 'normalized' if NORMALIZE else "no-normalized")
+    FEATURES_DATA_PATH = r"../features/pos_features_{}_{}_{}.csv".format(DATASET, target, 'normalized' if NORMALIZE else "no-normalized")
     print(f"Generating POS features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")
 
-    labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
-                                              "../train_set/truth_converted.pickle")
+    labeled_instances = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
+                                              "../train_set/truth_converted_{}.pickle".format(DATASET))
 
     tagger = nltk.StanfordNERTagger('../ner/english.all.3class.distsim.crf.ser.gz',
                                     '../ner/stanford-ner.jar',

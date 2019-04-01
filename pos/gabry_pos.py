@@ -13,8 +13,8 @@ st = nltk.StanfordNERTagger('../ner/english.all.3class.distsim.crf.ser.gz',
 					   '../ner/stanford-ner.jar',
                             encoding='utf-8')
 
-labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
-                                          "../train_set/truth_converted.pickle")
+labeled_instances = get_labeled_instances("../train_set/instances_converted_small.pickle",
+                                          "../train_set/truth_converted_small.pickle")
 clickbait_df = labeled_instances[labeled_instances.truthClass == 'clickbait']
 no_clickbait_df = labeled_instances[labeled_instances.truthClass == 'no-clickbait']
 

@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
     print(f"Generating features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")
 
-    labeled_instances = get_labeled_instances("../train_set/instances_converted.pickle",
-                                              "../train_set/truth_converted.pickle")
+    labeled_instances = get_labeled_instances("../train_set/instances_converted_small.pickle",
+                                              "../train_set/truth_converted_small.pickle")
 
     ids = list(labeled_instances.id)
 
