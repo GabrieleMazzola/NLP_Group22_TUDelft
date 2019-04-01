@@ -36,15 +36,19 @@ def generate_pos_features(sentence, ner_tagger, possible_tags, normalize):
 
 if __name__ == '__main__':
 
-    # TODO: postText    normalized      --> Done
-    # TODO: postText    no-normalized   --> Done
-    # TODO: targetTitle normalized      --> Done
-    # TODO: targetTitle no-normalized   --> Done
+    # TODO: small postText    normalized      --> Done
+    # TODO: small postText    no-normalized   --> Done
+    # TODO: small targetTitle normalized      --> Done
+    # TODO: small targetTitle no-normalized   --> Done
+    # TODO: big postText    normalized      --> Running
+    # TODO: big postText    no-normalized   --> TODO
+    # TODO: big targetTitle normalized      --> TODO
+    # TODO: big targetTitle no-normalized   --> TODO
 
-    DATASET = 'small'  # 'small' or 'big'
-    target = "targetTitle"  # "postText" or "targetTitle"
+    DATASET = 'big'  # 'small' or 'big'
+    target = "postText"  # "postText" or "targetTitle"
     prefix = "PT" if target == "postText" else "TA"
-    NORMALIZE = False
+    NORMALIZE = True
 
     FEATURES_DATA_PATH = r"../features/pos_features_{}_{}_{}.csv".format(DATASET, target, 'normalized' if NORMALIZE else "no-normalized")
     print(f"Generating POS features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")
