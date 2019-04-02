@@ -5,8 +5,8 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import pandas as pd
 import csv
 
-labeled_instances = get_labeled_instances("./train_set/instances_converted_small.pickle",
-                                          "./train_set/truth_converted_small.pickle")
+labeled_instances = get_labeled_instances("./train_set/instances_converted_big.pickle",
+                                          "./train_set/truth_converted_big.pickle")
 
 
 print(labeled_instances.columns)
@@ -19,7 +19,11 @@ def get_normalized_stopwords_count(sentence):
     word_tokens = word_tokenize(sentence_lower)
     stopwords_in_sentence = [w for w in word_tokens if w in stopWords]
 
+    if len(word_tokens) == 0:
+        return 0
+
     return len(stopwords_in_sentence)/len(word_tokens)
+
 
 def get_sentiment_features(sentence):
     analyser = SentimentIntensityAnalyzer()
@@ -35,6 +39,8 @@ def get_normalized_shortenings_count(sentence):
     words = sentence_lower.split()
     shortenings_in_sentence = [w for w in words if w in shortenings]
 
+    if len(words) == 0:
+        return 0
     return len(shortenings_in_sentence)/len(words)
 
 def get_slang_words_list():
@@ -56,6 +62,8 @@ def get_normalized_slang_count(sentence):
     words = text_post.split()
     slang_in_sentence = [w for w in words if w in slang_words]
 
+    if len(words) == 0:
+        return 0
     return len(slang_in_sentence)/ len(words)
 
 extracted_features = {}
