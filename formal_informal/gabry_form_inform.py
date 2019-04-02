@@ -7,6 +7,7 @@ from util import number_replacement
 
 
 def extract_formal_informal_features(sentence, wordset, normalize):
+    original_sentence = sentence
     sentence = sentence.replace("RT", "")
     tokenizer = RegexpTokenizer(r'\w+')
     lemmatizer = WordNetLemmatizer()
@@ -15,6 +16,10 @@ def extract_formal_informal_features(sentence, wordset, normalize):
     tokens = tokenizer.tokenize(sentence)
     lemmas = [lemmatizer.lemmatize(lemmatizer.lemmatize(token), pos='v') for token in tokens]
 
+    if not lemmas:
+        print("Sentence is empty!")
+        return [0]
+
     formal = 0
     for lemma in lemmas:
         if lemma in wordset:
@@ -22,25 +27,26 @@ def extract_formal_informal_features(sentence, wordset, normalize):
 
     if normalize:
         res = round(100 * formal / len(lemmas), 2)
-        return [res, round(100 - res,2)]
+        return [res]
     else:
-        return [formal, len(lemmas) - formal]
+        return [formal]
 
 
 if __name__ == '__main__':
 
     english_words = set(words.words())
 
+    DATASET = 'big'  # 'small' or 'big'
     target = "targetTitle"  # "postText" or "targetTitle"
     prefix = "PT" if target == "postText" else "TA"
     NORMALIZE = True
 
-    FEATURES_DATA_PATH = r"../features/formal_informal/formal_informal_features_small_{}_{}.csv".format(target, 'normalized' if NORMALIZE else "no-normalized")
+    FEATURES_DATA_PATH = r"../features/{}/formal_informal_features_{}_{}_{}.csv".format(DATASET, DATASET, target, 'normalized' if NORMALIZE else "no-normalized")
 
     print(f"Generating features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")
 
-    labeled_instances = get_labeled_instances("../train_set/instances_converted_small.pickle",
-                                              "../train_set/truth_converted_small.pickle")
+    labeled_instances = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
+                                              "../train_set/truth_converted_{}.pickle".format(DATASET))
 
     ids = list(labeled_instances.id)
 
@@ -55,7 +61,7 @@ if __name__ == '__main__':
         features.append(extract_formal_informal_features(txt, english_words, NORMALIZE))
 
     data_to_df = [tuple([ids[i]] + features[i]) for i in range(len(ids))]
-    labels = ['id', prefix + "_formal", prefix + "_informal"]
+    labels = ['id', prefix + "_formal"]
 
     df = pd.DataFrame.from_records(data_to_df, columns=labels)
 
