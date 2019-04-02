@@ -5,8 +5,8 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import pandas as pd
 import csv
 
-labeled_instances = get_labeled_instances("./train_set/instances_converted.pickle",
-                                          "./train_set/truth_converted.pickle")
+labeled_instances = get_labeled_instances("./train_set/instances_converted_small.pickle",
+                                          "./train_set/truth_converted_small.pickle")
 
 
 print(labeled_instances.columns)

@@ -14,8 +14,8 @@ def count_clickbaits_noclickbaits_based_on(df, filter_feature):
     print(f"Ratios: {pos_clickbait.shape[0] / clickbait_df.shape[0]} clickbait. {pos_noclickbait.shape[0] / no_clickbait_df.shape[0]} no-clickbait.")
 
 
-labeled_instances = get_labeled_instances("./train_set/instances_converted.pickle",
-                                          "./train_set/truth_converted.pickle")
+labeled_instances = get_labeled_instances("./train_set/instances_converted_small.pickle",
+                                          "./train_set/truth_converted_small.pickle")
 
 
 labeled_instances['image_presence'] = labeled_instances.apply(lambda row: 1 if row['postMedia'] else 0, axis=1)
