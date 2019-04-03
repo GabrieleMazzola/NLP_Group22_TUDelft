@@ -25,6 +25,10 @@ feature_paths.append(("Formal targetTitle normalized",
                       PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(
                           DATASET, DATASET)))
 
+feature_paths.append(("Matteo features",
+                      PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(
+                          DATASET)))
+
 # TODO: wait for generated features for the big dataset and then add them.
 # SENTIMENT_WORDS_FEATURES_PATH = r"./bianca_features.csv"
 # MATTEO_FEATURES_PATH = r"./matteo_features.csv"
@@ -41,7 +45,10 @@ for feat_name, feat_path in feature_paths:
     print(f"Obtained {feat_data.shape[1] - 1} feature columns")
     feat_data['id'] = feat_data['id'].astype(str)
     print(f"Merging them with the original dataframe")
-    data_df = pd.merge(data_df, feat_data, on=['id'])
+    if feat_name == 'Matteo features':
+        data_df = pd.concat([data_df, feat_data.drop('id', 1)], 1)
+    else:
+        data_df = pd.merge(data_df, feat_data, on=['id'])
     print(f"Obtained shape: {data_df.shape}")
     print("-------------\n")
 
