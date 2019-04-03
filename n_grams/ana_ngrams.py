@@ -122,7 +122,7 @@ if __name__ == '__main__':
     # total_ngram_counts = {ngram: {'clickbait': {}, 'non-clickbait': {}} for ngram, c in all_ngrams_joined}
     stop_words = set(stopwords.words('english'))
 
-    first_n_most_common = {ngram: count for (ngram, count) in all_ngrams_flattened[:int(len(all_ngrams_flattened) * 0.005)]}
+    first_n_most_common = {ngram: count for (ngram, count) in all_ngrams_flattened[:int(len(all_ngrams_flattened) * 0.0005)]}
     posts_with_n_most_common = {ngram: {'clickbait': [], 'non-clickbait': []} for ngram in first_n_most_common.keys()}
 
     no_clickbait_messages_containing_ngrams = set()
