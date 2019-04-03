@@ -1,7 +1,9 @@
+import pandas as pd
 from nltk import WordNetLemmatizer
 from nltk.corpus import words
 from nltk.tokenize import RegexpTokenizer
-import pandas as pd
+import numpy as np
+
 from gabry_dataset_parser import get_labeled_instances
 from util import number_replacement
 
@@ -37,11 +39,12 @@ if __name__ == '__main__':
     english_words = set(words.words())
 
     DATASET = 'big'  # 'small' or 'big'
-    target = "targetTitle"  # "postText" or "targetTitle"
+    target = "postText"  # "postText" or "targetTitle"
     prefix = "PT" if target == "postText" else "TA"
     NORMALIZE = True
 
-    FEATURES_DATA_PATH = r"../features/{}/formal_informal_features_{}_{}_{}.csv".format(DATASET, DATASET, target, 'normalized' if NORMALIZE else "no-normalized")
+    FEATURES_DATA_PATH = r"../features/{}/formal_informal_features_{}_{}_{}.csv".format(DATASET, DATASET, target,
+                                                                                        'normalized' if NORMALIZE else "no-normalized")
 
     print(f"Generating features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")
 
@@ -68,3 +71,8 @@ if __name__ == '__main__':
     df.to_csv(FEATURES_DATA_PATH, index=False)
 
     print("Generation of features completed, phuff!")
+
+    temp = df.merge(labeled_instances, on='id')[[prefix + '_formal', 'truthClass']]
+    cl = temp[temp['truthClass'] == 'clickbait'][prefix + '_formal']
+    no_cl = temp[temp['truthClass'] == 'no-clickbait'][prefix + '_formal']
+    print(np.mean(cl), np.mean(no_cl))
