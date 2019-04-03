@@ -41,14 +41,14 @@ if __name__ == '__main__':
     # TODO: small targetTitle normalized      --> Done
     # TODO: small targetTitle no-normalized   --> Done
     # TODO: big postText    normalized      --> Done
-    # TODO: big postText    no-normalized   --> TODO
-    # TODO: big targetTitle normalized      --> Running
+    # TODO: big postText    no-normalized   --> Running
+    # TODO: big targetTitle normalized      --> Done
     # TODO: big targetTitle no-normalized   --> TODO
 
     DATASET = 'big'  # 'small' or 'big'
-    target = "targetTitle"  # "postText" or "targetTitle"
+    target = "postText"  # "postText" or "targetTitle"
     prefix = "PT" if target == "postText" else "TA"
-    NORMALIZE = True
+    NORMALIZE = False
 
     FEATURES_DATA_PATH = r"../features/pos_features_{}_{}_{}.csv".format(DATASET, target, 'normalized' if NORMALIZE else "no-normalized")
     print(f"Generating POS features... it might take a while :P\n Path: '{FEATURES_DATA_PATH}' | {target} | {prefix}")

@@ -44,12 +44,14 @@ for feat_name, feat_path in feature_paths:
     feat_data = pd.read_csv(feat_path)
     print(f"Obtained {feat_data.shape[1] - 1} feature columns")
     feat_data['id'] = feat_data['id'].astype(str)
+
     print(f"Merging them with the original dataframe")
     if feat_name == 'Matteo features':
         data_df = pd.concat([data_df, feat_data.drop('id', 1)], 1)
     else:
         data_df = pd.merge(data_df, feat_data, on=['id'])
     print(f"Obtained shape: {data_df.shape}")
+    
     print("-------------\n")
 
 print("\n-------------\nEncoding labels.")
@@ -131,4 +133,5 @@ for model in models:
 
 
 # 73.5
-# {'criterion': 'entropy', 'max_depth': 150, 'max_features': 'log2', 'n_estimators': 500} 0.7549381085817256
+# adding POS targetTitle: 75.5 {'criterion': 'entropy', 'max_depth': 150, 'max_features': 'log2', 'n_estimators': 500}
+# adding Matteo features: 78.8% {'criterion': 'entropy', 'max_depth': 100, 'max_features': 'log2', 'n_estimators': 500}
