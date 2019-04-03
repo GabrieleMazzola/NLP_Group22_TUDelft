@@ -173,8 +173,8 @@ def char_based_features(row, features_dict):
     features_dict['numCharArticleParagraph'] = lenArtPar
 
 
-truth = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/truth.json")
-instances = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/instances.json")
+truth = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/truth_small.json")
+instances = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/instances_small.json")
 
 instances['class'] = truth['truthClass']
 

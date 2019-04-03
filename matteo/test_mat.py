@@ -1,7 +1,7 @@
 import pandas as pd
 
 test = pd.read_csv("./features_matteo.csv")
-instances = pd.read_json("train_set/instances.json")
+instances = pd.read_json("train_set/instances_small.json")
 
 test['id'] = instances['id']
 cols = test.columns.tolist()
