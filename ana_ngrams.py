@@ -50,8 +50,8 @@ def preprocess_post_text(raw_text):
     post_text = util.hashtag_replacement(post_text, "123hashtag123")
 
     post_text = re.sub(regex_retweet, "", post_text)
-    post_text = re.sub(regex_mentions, "", post_text)
     post_text = re.sub(regex_via, "", post_text)
+    post_text = re.sub(regex_mentions, "", post_text)
     post_text = post_text.translate(str.maketrans('', '', punctuation)).lower()
 
     tokenized_post = nltk.word_tokenize(post_text)
@@ -61,13 +61,14 @@ def preprocess_post_text(raw_text):
 def get_all_ngrams(df, n):
     stop_words = set(stopwords.words('english'))
 
-    ngrams = {}
+    ngrams = None
     row_iterator = df.iterrows()
     for row in row_iterator:
         post_text = row[1]['postText'][0]
         tokenized_post = preprocess_post_text(post_text)
 
         if n == 1:
+            # if Unigrams exclude stopwords
             tokenized_post = [replace(w) for w in tokenized_post if w not in stop_words]
         else:
             tokenized_post = [replace(w) for w in tokenized_post]
@@ -82,7 +83,7 @@ def get_all_ngrams(df, n):
 
 if __name__ == '__main__':
     # load frames and get the right columns
-    labeled_instances = get_labeled_instances("./train_set/instances_converted_small.pickle", "./train_set/truth_converted_small.pickle")
+    labeled_instances = get_labeled_instances("./train_set/instances_converted_big.pickle", "./train_set/truth_converted_big.pickle")
     clickbait_df = labeled_instances[labeled_instances.truthClass == 'clickbait']
     no_clickbait_df = labeled_instances[labeled_instances.truthClass == 'no-clickbait']
     clickbait_df_cols = clickbait_df[['id', 'postText', 'targetTitle']]

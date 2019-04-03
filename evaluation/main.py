@@ -29,6 +29,10 @@ feature_paths.append(("Matteo features",
                       PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(
                           DATASET)))
 
+feature_paths.append(("Bianca features",
+                      PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(
+                          DATASET)))
+
 # TODO: wait for generated features for the big dataset and then add them.
 # SENTIMENT_WORDS_FEATURES_PATH = r"./bianca_features.csv"
 # MATTEO_FEATURES_PATH = r"./matteo_features.csv"
@@ -51,7 +55,7 @@ for feat_name, feat_path in feature_paths:
     else:
         data_df = pd.merge(data_df, feat_data, on=['id'])
     print(f"Obtained shape: {data_df.shape}")
-    
+
     print("-------------\n")
 
 print("\n-------------\nEncoding labels.")
@@ -80,8 +84,8 @@ if CHECK_RANDOM:
 X_train, X_test, y_train, y_test = train_test_split(eval_df, label_encoded, test_size=0.2, random_state=42)
 
 param_randForest = {
-    'n_estimators': [300, 500],
-    'max_depth': [100, 150, 200],
+    'n_estimators': [400, 500, 600],
+    'max_depth': [100, 125, 150, 175, 200],
     'max_features': ['auto', 'sqrt', 'log2'],
     'criterion': ['gini', 'entropy']
 }
