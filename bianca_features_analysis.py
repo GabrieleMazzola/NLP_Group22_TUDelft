@@ -40,7 +40,9 @@ def stopwords_analysis():
 
     stopwords_count_clickbait = 0
     total_words = 0
-    for i, text in enumerate(clickbait_df['postText']):
+
+    #for i, text in enumerate(clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         text_post = text[0].lower()
         word_tokens = text_post.split()
         stopwords_in_sentence = [w for w in word_tokens if w in stopWords]
@@ -52,7 +54,8 @@ def stopwords_analysis():
 
     stopwords_count_nonclickbait = 0
     total_words = 0
-    for i, text in enumerate(no_clickbait_df['postText']):
+    #for i, text in enumerate(no_clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         text_post = text[0].lower()
         word_tokens = text_post.split()
         stopwords_in_sentence = [w for w in word_tokens if w in stopWords]
@@ -108,7 +111,8 @@ def shortenings_headline():
 
     shortenings_count_clickbait = 0
     total_words = 0
-    for i, text in enumerate(clickbait_df['postText']):
+    #for i, text in enumerate(clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         text_post = text[0].lower()
         word_tokens = text_post.split()
         shortenings_in_sentence = [w for w in word_tokens if w in shortenings]
@@ -120,7 +124,8 @@ def shortenings_headline():
 
     shortenings_count_nonclickbait = 0
     total_words = 0
-    for i, text in enumerate(no_clickbait_df['postText']):
+    #for i, text in enumerate(no_clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         text_post = text[0].lower()
         word_tokens = text_post.split()
         shortenings_in_sentence = [w for w in word_tokens if w in shortenings]
@@ -158,7 +163,8 @@ def slang_words_analysis():
 
     slang_count_clickbait = 0
     total_words = 0
-    for i, text in enumerate(clickbait_df['postText']):
+    #for i, text in enumerate(clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         text_post = text[0].replace("RT", "")
         word_tokens = text_post.split()
         slang_in_sentence = [w for w in word_tokens if w in slang_words]
@@ -169,7 +175,8 @@ def slang_words_analysis():
 
     slang_count_nonclickbait = 0
     total_words = 0
-    for i, text in enumerate(no_clickbait_df['postText']):
+    #for i, text in enumerate(no_clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         text_post = text[0].replace("RT", "")
         word_tokens = text_post.split()
         slang_in_sentence = [w for w in word_tokens if w in slang_words]
@@ -190,7 +197,8 @@ def sentiment_analysis():
 
     polarity_neutral_clickbait = 0
     count = 0
-    for i, text in enumerate(clickbait_df['postText']):
+    #for i, text in enumerate(clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         score = analyser.polarity_scores(text[0])
         polarity_neutral_clickbait += score['neu']
         count += 1
@@ -199,7 +207,8 @@ def sentiment_analysis():
 
     polarity_neutral_noclickbait = 0
     count = 0
-    for i, text in enumerate(no_clickbait_df['postText']):
+    #for i, text in enumerate(no_clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
         score = analyser.polarity_scores(text[0])
         polarity_neutral_noclickbait += score['neu']
         count += 1
@@ -208,7 +217,100 @@ def sentiment_analysis():
 
 
 
-#stopwords_analysis()
+
+################# STOPWRODS ANALYSIS #################
+def stopwords_analysis_paragraphs():
+    stopWords = set(stopwords.words('english'))
+
+    stopwords_count_clickbait = 0
+    total_words = 0
+
+    normalized_stopwords_clickbait = []
+    #for i, text in enumerate(clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
+
+        stopwords_count_clickbait = 0
+        total_words = 0
+
+        for par in text:
+            text_post = par.lower()
+            word_tokens = text_post.split()
+            stopwords_in_sentence = [w for w in word_tokens if w in stopWords]
+
+            stopwords_count_clickbait += len(stopwords_in_sentence)
+            total_words += len(word_tokens)
+
+        if total_words != 0:
+            normalized_stopwords_clickbait.append(stopwords_count_clickbait/total_words)
+
+    percentage_stopwords_clickbait = np.mean(normalized_stopwords_clickbait)
+
+    normalized_stopwords_noclickbait = []
+    #for i, text in enumerate(no_clickbait_df['postText']):
+    for i, text in enumerate(no_clickbait_df['targetParagraphs']):
+
+        stopwords_count_nonclickbait = 0
+        total_words = 0
+
+        for par in text:
+            text_post = par.lower()
+            word_tokens = text_post.split()
+            stopwords_in_sentence = [w for w in word_tokens if w in stopWords]
+
+            stopwords_count_nonclickbait += len(stopwords_in_sentence)
+            total_words += len(word_tokens)
+
+        if total_words != 0:
+            normalized_stopwords_noclickbait.append(stopwords_count_nonclickbait/total_words)
+
+    percentage_stopwords_noclickbait = np.mean(normalized_stopwords_noclickbait)
+
+    print(f"Stopwords clickbait: {percentage_stopwords_clickbait}")
+    print(f"Stopwords non_clickbait: {percentage_stopwords_noclickbait}")
+
+
+
+def sentiment_analysis_paragraphs():
+    analyser = SentimentIntensityAnalyzer()
+
+    polarity_neutral_clickbait = 0
+    count = 0
+    #for i, text in enumerate(clickbait_df['postText']):
+    for i, text in enumerate(clickbait_df['targetParagraphs']):
+        polarity_neutral_par = 0
+        count_par = 0
+        for par in text:
+            score = analyser.polarity_scores(par)
+            polarity_neutral_par += score['neu']
+            count_par += 1
+
+        if count_par != 0:
+            polarity_neutral_clickbait += polarity_neutral_par/count_par
+            count +=1
+
+    print(f"Neutral clickbait: {polarity_neutral_clickbait/count}")
+
+    polarity_neutral_noclickbait = 0
+    count = 0
+    #for i, text in enumerate(no_clickbait_df['postText']):
+    for i, text in enumerate(no_clickbait_df['targetParagraphs']):
+        polarity_neutral_noclickbait_par = 0
+        count_par = 0
+
+        for par in text:
+            score = analyser.polarity_scores(par)
+            polarity_neutral_noclickbait_par += score['neu']
+            count_par += 1
+
+        if count_par != 0:
+            polarity_neutral_noclickbait += polarity_neutral_noclickbait_par/count_par
+            count += 1
+
+    print(f"Neutral non-clickbait: {polarity_neutral_noclickbait / count}")
+
+
+#stopwords_analysis_paragraphs()
+sentiment_analysis_paragraphs()
 #shortenings_headline()
 #sentiment_analysis()
 #slang_words_analysis()
