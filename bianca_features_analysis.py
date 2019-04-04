@@ -111,27 +111,34 @@ def shortenings_headline():
 
     shortenings_count_clickbait = 0
     total_words = 0
-    #for i, text in enumerate(clickbait_df['postText']):
-    for i, text in enumerate(clickbait_df['targetParagraphs']):
+    for i, text in enumerate(clickbait_df['postText']):
         text_post = text[0].lower()
         word_tokens = text_post.split()
         shortenings_in_sentence = [w for w in word_tokens if w in shortenings]
 
-        shortenings_count_clickbait += len(shortenings_in_sentence)
-        total_words += len(word_tokens)
+        #shortenings_count_clickbait += len(shortenings_in_sentence)
+        #total_words += len(word_tokens)
+
+        if len(shortenings_in_sentence) > 0:
+            shortenings_count_clickbait += 1
+        total_words += 1
+
     percentage_shortenings_clickbait = (shortenings_count_clickbait * 100) / total_words
 
 
     shortenings_count_nonclickbait = 0
     total_words = 0
-    #for i, text in enumerate(no_clickbait_df['postText']):
-    for i, text in enumerate(clickbait_df['targetParagraphs']):
+    for i, text in enumerate(no_clickbait_df['postText']):
         text_post = text[0].lower()
         word_tokens = text_post.split()
         shortenings_in_sentence = [w for w in word_tokens if w in shortenings]
 
-        shortenings_count_nonclickbait += len(shortenings_in_sentence)
-        total_words += len(word_tokens)
+        #shortenings_count_nonclickbait += len(shortenings_in_sentence)
+        #total_words += len(word_tokens)
+
+        if len(shortenings_in_sentence) > 0:
+            shortenings_count_nonclickbait += 1
+        total_words += 1
 
     percentage_shortenings_noclickbait = (shortenings_count_nonclickbait * 100) / total_words
     print(f"Shortenings clickbait: {percentage_shortenings_clickbait}")
@@ -310,7 +317,7 @@ def sentiment_analysis_paragraphs():
 
 
 #stopwords_analysis_paragraphs()
-sentiment_analysis_paragraphs()
-#shortenings_headline()
+#sentiment_analysis_paragraphs()
+shortenings_headline()
 #sentiment_analysis()
 #slang_words_analysis()
