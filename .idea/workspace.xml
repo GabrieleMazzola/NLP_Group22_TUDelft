@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d3428c07-f26e-40b2-8efc-4a680ec408f0" name="Default Changelist" comment="include new dataset (big)">
-      <change afterPath="$PROJECT_DIR$/features/pos_features_big_postText_normalized.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train_set/instances_converted_big.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train_set/truth_converted_big.pickle" afterDir="false" />
+    <list default="true" id="d3428c07-f26e-40b2-8efc-4a680ec408f0" name="Default Changelist" comment="work on ngrams">
+      <change afterPath="$PROJECT_DIR$/features/big/pos_features_big_postText_no-normalized.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/big/pos_features_big_postText_no-normalized_infoGain70.0.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/n_grams/infogain.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/n_grams/ngrams_features_counts_after_infoGain1.0.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/n_grams/ngrams_features_counts_before_infoGain.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pos/infogain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gabry_dataset_converter.py" beforeDir="false" afterPath="$PROJECT_DIR$/gabry_dataset_converter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pos/gabry_pos_feature_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/pos/gabry_pos_feature_generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,27 +18,22 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/nlp_project_22$gabry_pos_feature_generation.coverage" NAME="gabry_pos_feature_generation Coverage Results" MODIFIED="1554103007191" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pos" />
-    <SUITE FILE_PATH="coverage/nlp_project_22$gabry_form_inform.coverage" NAME="gabry_form_inform Coverage Results" MODIFIED="1553967526583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/formal_informal" />
-    <SUITE FILE_PATH="coverage/nlp_project_22$gabry_feature_collector.coverage" NAME="gabry_feature_collector Coverage Results" MODIFIED="1554021819065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/features" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$gabry_pos_feature_generation.coverage" NAME="gabry_pos_feature_generation Coverage Results" MODIFIED="1554293474721" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pos" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$infogain.coverage" NAME="infogain Coverage Results" MODIFIED="1554407356559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/n_grams" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$gabry_form_inform.coverage" NAME="gabry_form_inform Coverage Results" MODIFIED="1554237259101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/formal_informal" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$ana_ngrams.coverage" NAME="ana_ngrams Coverage Results" MODIFIED="1554319144453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/nlp_project_22$gabry_dataset_converter.coverage" NAME="gabry_dataset_converter Coverage Results" MODIFIED="1554102672093" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$gabry_feature_collector.coverage" NAME="gabry_feature_collector Coverage Results" MODIFIED="1554202227861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/features" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$infogain__1_.coverage" NAME="pos_infogain Coverage Results" MODIFIED="1554405962956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pos" />
+    <SUITE FILE_PATH="coverage/nlp_project_22$main.coverage" NAME="main Coverage Results" MODIFIED="1554406919102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/evaluation" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pos/gabry_pos_feature_generation.py">
+        <entry file="file://$PROJECT_DIR$/n_grams/infogain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="346">
-              <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gabry_dataset_parser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="205">
+              <caret line="89" column="20" selection-start-line="89" selection-start-column="20" selection-end-line="89" selection-end-column="20" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -62,6 +59,8 @@
       <find>print</find>
       <find>features_dict</find>
       <find>of the</find>
+      <find>number</find>
+      <find>ravel</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -75,10 +74,16 @@
         <option value="$PROJECT_DIR$/mat_features.py" />
         <option value="$PROJECT_DIR$/common_phrases.txt" />
         <option value="$PROJECT_DIR$/matteo/mat_features.py" />
-        <option value="$PROJECT_DIR$/formal_informal/gabry_form_inform.py" />
-        <option value="$PROJECT_DIR$/features/gabry_feature_collector.py" />
         <option value="$PROJECT_DIR$/gabry_dataset_converter.py" />
+        <option value="$PROJECT_DIR$/features/gabry_feature_collector.py" />
+        <option value="$PROJECT_DIR$/pos/gabry_pos_analysis.py" />
+        <option value="$PROJECT_DIR$/formal_informal/gabry_form_inform.py" />
         <option value="$PROJECT_DIR$/pos/gabry_pos_feature_generation.py" />
+        <option value="$PROJECT_DIR$/util.py" />
+        <option value="$PROJECT_DIR$/ana_ngrams.py" />
+        <option value="$PROJECT_DIR$/pos/infogain.py" />
+        <option value="$PROJECT_DIR$/evaluation/main.py" />
+        <option value="$PROJECT_DIR$/n_grams/infogain.py" />
       </list>
     </option>
   </component>
@@ -93,7 +98,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -104,12 +108,28 @@
             <path>
               <item name="nlp_project_22" type="b2602c69:ProjectViewProjectNode" />
               <item name="nlp_project_22" type="462c0819:PsiDirectoryNode" />
+              <item name="evaluation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlp_project_22" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlp_project_22" type="462c0819:PsiDirectoryNode" />
               <item name="features" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlp_project_22" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlp_project_22" type="462c0819:PsiDirectoryNode" />
+              <item name="n_grams" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlp_project_22" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlp_project_22" type="462c0819:PsiDirectoryNode" />
+              <item name="pos" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -121,9 +141,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Data\Git\TUDelft\Q3_4\information_retrieval\nlp_project_22\features\big" />
+      <recent name="C:\Data\Git\TUDelft\Q3_4\information_retrieval\nlp_project_22\n_grams" />
+      <recent name="C:\Data\Git\TUDelft\Q3_4\information_retrieval\nlp_project_22\features\small" />
       <recent name="C:\Data\Git\TUDelft\Q3_4\information_retrieval\nlp_project_22\features\formal_informal" />
       <recent name="$PROJECT_DIR$/matteo" />
-      <recent name="$PROJECT_DIR$/features" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -138,8 +160,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.gabry_pos_feature_generation">
-    <configuration name="gabry_dataset_converter" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.infogain">
+    <configuration name="ana_ngrams" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="nlp_project_22" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -152,51 +174,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gabry_dataset_converter.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="gabry_feature_collector" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="nlp_project_22" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/features" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/features/gabry_feature_collector.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="gabry_form_inform" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="nlp_project_22" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/formal_informal" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/formal_informal/gabry_form_inform.py" />
+      <option name="SCRIPT_NAME" value="C:\Data\Git\TUDelft\Q3_4\information_retrieval\nlp_project_22\n_grams\ana_ngrams.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -227,7 +205,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="mat_features" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="infogain" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="nlp_project_22" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -235,12 +213,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/n_grams" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/matteo/mat_features.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/n_grams/infogain.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -249,13 +227,64 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="nlp_project_22" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/evaluation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluation/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pos_infogain" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="nlp_project_22" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pos" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pos/infogain.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.ana_ngrams" />
+      <item itemvalue="Python.gabry_pos_feature_generation" />
+      <item itemvalue="Python.infogain" />
+      <item itemvalue="Python.pos_infogain" />
+      <item itemvalue="Python.main" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.infogain" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.pos_infogain" />
+        <item itemvalue="Python.ana_ngrams" />
         <item itemvalue="Python.gabry_pos_feature_generation" />
-        <item itemvalue="Python.gabry_dataset_converter" />
-        <item itemvalue="Python.gabry_feature_collector" />
-        <item itemvalue="Python.gabry_form_inform" />
-        <item itemvalue="Python.mat_features" />
       </list>
     </recent_temporary>
   </component>
@@ -270,7 +299,11 @@
       <option name="presentableId" value="Default" />
       <updated>1553846523264</updated>
       <workItem from="1553965802095" duration="7073000" />
-      <workItem from="1554101692397" duration="1335000" />
+      <workItem from="1554101692397" duration="34551000" />
+      <workItem from="1554274816679" duration="1448000" />
+      <workItem from="1554292236958" duration="14529000" />
+      <workItem from="1554367842888" duration="6242000" />
+      <workItem from="1554395199031" duration="11729000" />
     </task>
     <task id="LOCAL-00001" summary="new features">
       <created>1553875674951</created>
@@ -300,11 +333,88 @@
       <option name="project" value="LOCAL" />
       <updated>1554102078875</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="start creating POS features for big dataset">
+      <created>1554103048918</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1554103048918</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Big features added">
+      <created>1554148680591</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1554148680591</updated>
+    </task>
+    <task id="LOCAL-00007" summary="reorganize features files">
+      <created>1554190795125</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1554190795125</updated>
+    </task>
+    <task id="LOCAL-00008" summary="start evaluation">
+      <created>1554206545596</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1554206545596</updated>
+    </task>
+    <task id="LOCAL-00009" summary="generate big features target Title">
+      <created>1554292252608</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1554292252608</updated>
+    </task>
+    <task id="LOCAL-00010" summary="include matteo features in grid search">
+      <created>1554292649730</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1554292649730</updated>
+    </task>
+    <task id="LOCAL-00011" summary="test with matteo features">
+      <created>1554315652539</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1554315652539</updated>
+    </task>
+    <task id="LOCAL-00012" summary="move bianca features">
+      <created>1554315692933</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1554315692933</updated>
+    </task>
+    <task id="LOCAL-00013" summary="work on ngrams">
+      <created>1554322615525</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1554322615525</updated>
+    </task>
+    <task id="LOCAL-00014" summary="work on ngrams">
+      <created>1554322856348</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1554322856348</updated>
+    </task>
+    <task id="LOCAL-00015" summary="more evaluation metrics">
+      <created>1554379105117</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1554379105117</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11015000" />
+    <option name="totallyTimeSpent" value="78179000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -317,30 +427,53 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20067114" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34026846" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32719547" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30169973" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39943343" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.4490085" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.43909347" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32829374" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32937366" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3286119" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32937366" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3286119" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
+      <window_info anchor="bottom" id="Messages" order="13" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="right" id="SciView" order="4" weight="0.69328856" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16107382" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32719547" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.30311614" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39518413" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32829374" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3286119" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3286119" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3286119" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info anchor="right" id="SciView" order="4" visible="true" weight="0.087919466" />
-    </layout>
+      <window_info anchor="right" id="SciView" order="4" visible="true" weight="0.06577181" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -350,7 +483,17 @@
     <MESSAGE value="full features" />
     <MESSAGE value="add formal/informal features. Not really effective" />
     <MESSAGE value="include new dataset (big)" />
-    <option name="LAST_COMMIT_MESSAGE" value="include new dataset (big)" />
+    <MESSAGE value="start creating POS features for big dataset" />
+    <MESSAGE value="Big features added" />
+    <MESSAGE value="reorganize features files" />
+    <MESSAGE value="start evaluation" />
+    <MESSAGE value="generate big features target Title" />
+    <MESSAGE value="include matteo features in grid search" />
+    <MESSAGE value="test with matteo features" />
+    <MESSAGE value="move bianca features" />
+    <MESSAGE value="work on ngrams" />
+    <MESSAGE value="more evaluation metrics" />
+    <option name="LAST_COMMIT_MESSAGE" value="more evaluation metrics" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -362,26 +505,80 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/matteo/mat_features.py</url>
-          <line>203</line>
+          <line>216</line>
           <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/features/gabry_feature_collector.py</url>
-          <line>68</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/formal_informal/gabry_form_inform.py</url>
-          <line>61</line>
-          <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pos/gabry_pos_feature_generation.py</url>
           <line>58</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/features/gabry_feature_collector.py</url>
+          <line>130</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/formal_informal/gabry_form_inform.py</url>
+          <line>77</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/n_grams/ana_ngrams.py</url>
+          <line>134</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>feat_data.shape</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(selected_features)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(feat_df.columns)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(feat_df.columns    )</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(info_gains)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>zip(list(feat_df.columns), list(info_gains))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>pd.merge(data_df, feat_data, on=['id'])</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>dict_list[12]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(all_ngrams)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file:///usr/local/lib/python3.6/dist-packages/nltk/corpus/reader/wordnet.py" />
@@ -389,9 +586,6 @@
     <entry file="file:///usr/lib/python3/dist-packages/apport_python_hook.py" />
     <entry file="file:///usr/local/lib/python3.6/dist-packages/nltk/data.py" />
     <entry file="file://$PROJECT_DIR$/gabry_pos.py" />
-    <entry file="file://$PROJECT_DIR$/util.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_tess.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-430">
@@ -410,16 +604,6 @@
         <state>
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pos/gabry_pos_analysis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="54" lean-forward="true" selection-start-line="12" selection-start-column="54" selection-end-line="12" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -474,40 +658,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/features/pos_features_small_postText_no-normalized.csv">
+    <entry file="file://$PROJECT_DIR$/features/small/pos_features_small_postText_no-normalized.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/features/pos_features_small_postText_normalized.csv">
+    <entry file="file://$PROJECT_DIR$/features/small/pos_features_small_postText_normalized.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/features/pos_features_small_targetTitle_no-normalized.csv">
+    <entry file="file://$PROJECT_DIR$/features/small/pos_features_small_targetTitle_no-normalized.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/features/pos_features_small_targetTitle_normalized.csv">
+    <entry file="file://$PROJECT_DIR$/features/small/pos_features_small_targetTitle_normalized.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/features/formal_informal/formal_informal_features_small_postText_normalized.csv">
+    <entry file="file://$PROJECT_DIR$/features/small/formal_informal_features_small_postText_normalized.csv">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/formal_informal/gabry_form_inform.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="42" column="34" selection-start-line="42" selection-start-column="34" selection-end-line="42" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/features/gabry_feature_collector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="76" column="30" selection-start-line="76" selection-start-column="30" selection-end-line="76" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gabry_dataset_converter.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -529,10 +693,131 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pos/gabry_pos_analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="6" column="109" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="109" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/formal_informal/gabry_form_inform.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="15" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n_grams/ana_ngrams.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="135" column="4" selection-start-line="135" selection-start-column="4" selection-end-line="136" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/re.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="191" selection-start-line="191" selection-end-line="191" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pos/gabry_pos_feature_generation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
+        <state relative-caret-position="199">
+          <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n_grams/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/features/gabry_feature_collector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1394">
+          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/pandas/core/reshape/merge.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="979" selection-start-line="979" selection-end-line="979" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pos/infogain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="46" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/evaluation/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="103" column="1" selection-start-line="103" selection-start-column="1" selection-end-line="103" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bianca_feature_extraction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-506">
+          <caret line="45" column="4" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n_grams/infogain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="89" column="20" selection-start-line="89" selection-start-column="20" selection-end-line="89" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

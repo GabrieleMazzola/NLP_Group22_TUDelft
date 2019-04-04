@@ -101,7 +101,7 @@ param_svm = {'C': [1, 10, 100, 1000],
 
 models = []
 models.append(("Random forest ", RandomForestClassifier(n_estimators=50, max_depth=100), param_randForest))
-models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
+#models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
 # models.append(("SVM", svm.SVC(), param_svm))
 
 
