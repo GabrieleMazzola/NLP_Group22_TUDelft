@@ -81,6 +81,24 @@ def get_all_ngrams(df, n):
     return ngrams
 
 
+def get_all_ngrams_for_post(post_text):
+    stop_words = set(stopwords.words('english'))
+
+    ngrams = []
+    for n in [1,2, 3, 4]:
+        tokenized_post = preprocess_post_text(post_text)
+
+        if n == 1:
+            # if Unigrams exclude stopwords
+            tokenized_post = [replace(w) for w in tokenized_post if w not in stop_words]
+        else:
+            tokenized_post = [replace(w) for w in tokenized_post]
+
+        ngrams += list(get_ngrams(tokenized_post, n))
+
+    return set(ngrams)
+
+
 if __name__ == '__main__':
     # load frames and get the right columns
     labeled_instances = get_labeled_instances("./train_set/instances_converted_big.pickle", "./train_set/truth_converted_big.pickle")
