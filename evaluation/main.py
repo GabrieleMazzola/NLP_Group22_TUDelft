@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score, mean_squared_error
+from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold
 from sklearn.model_selection import train_test_split
 
 from gabry_dataset_parser import get_labeled_instances
@@ -14,28 +16,25 @@ DATASET = 'big'  # 'big' or 'small'
 PATH_TO_FEATURE_FOLDER = "../features/"
 
 feature_paths = []
-feature_paths.append(('POS postText normalized',
-                      PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_normalized.csv".format(DATASET, DATASET)))
-feature_paths.append(('POS targetTitle normalized',
-                      PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET)))
-feature_paths.append(("Formal postText normalized",
-                      PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_postText_normalized.csv".format(DATASET,
-                                                                                                               DATASET)))
-feature_paths.append(("Formal targetTitle normalized",
-                      PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(
-                          DATASET, DATASET)))
+feature_paths.append(('POS postText normalized', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_normalized.csv".format(DATASET, DATASET)))
+# alone -> 66.8 % log reg
 
-feature_paths.append(("Matteo features",
-                      PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(
-                          DATASET)))
+feature_paths.append(('POS targetTitle normalized', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET)))
+# alone -> 62.7 % log reg
+# POS together -> 67.3%
 
-feature_paths.append(("Bianca features",
-                      PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(
-                          DATASET)))
+# feature_paths.append(("Formal postText normalized",  PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_postText_normalized.csv".format(DATASET, DATASET))) # useless
+# feature_paths.append(("Formal targetTitle normalized",PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET))) # useless
 
-# TODO: wait for generated features for the big dataset and then add them.
-# SENTIMENT_WORDS_FEATURES_PATH = r"./bianca_features.csv"
-# MATTEO_FEATURES_PATH = r"./matteo_features.csv"
+feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(DATASET)))
+# alone -> 69.4 % (logreg)
+
+
+# feature_paths.append(("Similarity lin", PATH_TO_FEATURE_FOLDER + "{}/matteo_full_similarity.csv".format(DATASET)))
+# alone -> 0 precision
+
+feature_paths.append(("Bianca features", PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(DATASET)))
+# alone -> 68.7% logreg
 
 
 data_df = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
@@ -84,7 +83,7 @@ if CHECK_RANDOM:
 X_train, X_test, y_train, y_test = train_test_split(eval_df, label_encoded, test_size=0.2, random_state=42)
 
 param_randForest = {
-    'n_estimators': [400, 500, 600],
+    'n_estimators': [400],
     'max_depth': [100, 125, 150, 175, 200],
     'max_features': ['auto', 'sqrt', 'log2'],
     'criterion': ['gini', 'entropy']
@@ -92,7 +91,7 @@ param_randForest = {
 
 param_logisticReg = {
     'penalty': ['l1', 'l2'],
-    'C': np.logspace(-3, 3, 7)
+    #'C': np.logspace(-3, 3, 7)
 }
 
 param_svm = {'C': [1, 10, 100, 1000],
@@ -101,41 +100,51 @@ param_svm = {'C': [1, 10, 100, 1000],
              }
 
 models = []
-# models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
-models.append(("Random forest ", RandomForestClassifier(), param_randForest))
+models.append(("Random forest ", RandomForestClassifier(n_estimators=50, max_depth=100), param_randForest))
+models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
 # models.append(("SVM", svm.SVC(), param_svm))
 
 
 eval_metric = 'precision'
 print(f"'{eval_metric}' is being used as evaluation metric")
 
-results = []
-for model in models:
-    clf = GridSearchCV(model[1], model[2], cv=5, scoring=eval_metric)
-    clf.fit(X_train, y_train.values.ravel())
-    res = clf.cv_results_
-    results.append(res)
-    print(clf.best_params_, clf.best_score_)
+# results = []
+# for model in models:
+#     clf = GridSearchCV(model[1], model[2], cv=5, scoring=eval_metric)
+#     clf.fit(X_train, y_train.values.ravel())
+#     res = clf.cv_results_
+#     results.append(res)
+#     print(clf.best_params_, clf.best_score_)
 
 
-# rskf = RepeatedStratifiedKFold(n_splits=10, n_repeats=10)
-# for model_name, model in models:
+for model_name, model, model_params in models:
+    print(f"using model {model_name}")
+    skf = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=36851234)
+    precisions = []
+    accuracies = []
+    recalls = []
+    f1s = []
+    for train_index, test_index in skf.split(eval_df, label_encoded):
 
-# skf = RepeatedStratifiedKFold(n_splits=10, n_repeats=10, random_state=36851234)
-# precisions = []
-# for train_index, test_index in rskf.split(eval_df, label_encoded):
-#
-#     X_train, X_test = eval_df.loc[train_index], eval_df.loc[test_index]
-#     y_train, y_test = label_encoded.loc[train_index], label_encoded.loc[test_index]
-#
-#     model.fit(X_train, y_train.values.ravel())
-#     y_pred = model.predict(X_test)
-#     precision = precision_score(y_test, y_pred)
-#     precisions.append(precision)
-#
-# print(model_name, np.mean(precisions), np.std(precisions))
+        X_train, X_test = eval_df.loc[train_index], eval_df.loc[test_index]
+        y_train, y_test = label_encoded.loc[train_index], label_encoded.loc[test_index]
 
+        model.fit(X_train, y_train.values.ravel())
+        y_pred = model.predict(X_test)
+        precision = precision_score(y_test, y_pred)
+        precisions.append(precision)
+        accuracies.append(accuracy_score(y_test, y_pred))
+        recalls.append(recall_score(y_test, y_pred))
+        f1s.append(f1_score(y_test, y_pred))
+
+    print(model_name)
+    print("acc", np.mean(accuracies), np.std(accuracies))
+    print("prec", np.mean(precisions), np.std(precisions))
+    print("rec", np.mean(recalls), np.std(recalls))
+    print("f1", np.mean(f1s), np.std(f1s))
 
 # 73.5
 # adding POS targetTitle: 75.5 {'criterion': 'entropy', 'max_depth': 150, 'max_features': 'log2', 'n_estimators': 500}
 # adding Matteo features: 78.8% {'criterion': 'entropy', 'max_depth': 100, 'max_features': 'log2', 'n_estimators': 500}
+# adding Bianca's features -> no change
+# adding avg Similarity: 78.8% -> no change
