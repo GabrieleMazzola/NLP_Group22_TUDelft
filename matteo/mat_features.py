@@ -1,4 +1,5 @@
 import string
+import json_lines
 import nltk
 import pandas as pd
 import itertools
@@ -8,14 +9,27 @@ from nltk.corpus import wordnet as wn
 from nltk.stem import WordNetLemmatizer
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
+import os
+
+java_path = "C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath\\java.exe"
+os.environ['JAVAHOME'] = java_path
+
+tmp = pd.DataFrame()
+with open('C:\\Users\\matte\\Desktop\\instances.jsonl', 'rb') as f: # opening file in binary(rb) mode
+   i = 0
+   for item in json_lines.reader(f):
+       print('processing ' + str(i))
+       # print(type(item)) #or use print(item['X']) for printing specific data
+       tmp = tmp.append(item, ignore_index=True)
+       i = i + 1
 
 stop_words = set(stopwords.words('english'))
 stop_words.add('\'s')
 stop_words.add('RT')
 stop_words.add('\'re')
 st = StanfordNERTagger(
-    '/home/esilezz/Scrivania/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
-    '/home/esilezz/Scrivania/stanford-ner-2018-10-16/stanford-ner.jar',
+    'C:\\Users\\matte\\Desktop\\TU Delft\\Quarter III\\Information Retrieval\\NLP Project\\stanford-ner-2018-10-16\\classifiers\\english.all.3class.distsim.crf.ser.gz',
+    'C:\\Users\\matte\\Desktop\\TU Delft\\Quarter III\\Information Retrieval\\NLP Project\\stanford-ner-2018-10-16\\stanford-ner.jar',
     encoding='utf-8')
 
 semcor_ic = wordnet_ic.ic('ic-semcor.dat')
@@ -173,38 +187,36 @@ def char_based_features(row, features_dict):
     features_dict['numCharArticleParagraph'] = lenArtPar
 
 
-truth = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/truth_small.json")
-instances = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/instances_small.json")
+# truth = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/truth_small.json")
+# instances = pd.read_json("/home/esilezz/Scrivania/nlp_project_22/train_set/instances_small.json")
 
-instances['class'] = truth['truthClass']
+instances = tmp
+
+# instances['class'] = truth['truthClass']
 
 # id postText postTimestamp postMedia targetTitle targetDescription targetKeywords targetParagraphs targetCaptions
-cols = ['id', 'numCharPostTitle', 'numCharArticleTitle', 'numCharArticleDescr', 'numCharArticleKeywords',
-        'numCharArticleCaption', 'numCharArticleParagraph', 'avgSimilarityPostTitle',
-        'avgWordLenPostTitle', 'avgWordLenArticleTitle', 'capitalPostTitle', 'numWords', 'commonPhrase']
+# cols = ['id', 'numCharPostTitle', 'numCharArticleTitle', 'numCharArticleDescr', 'numCharArticleKeywords',
+#         'numCharArticleCaption', 'numCharArticleParagraph', 'avgSimilarityPostTitle',
+#         'avgWordLenPostTitle', 'avgWordLenArticleTitle', 'capitalPostTitle', 'numWords', 'commonPhrase']
+cols = ['id', 'avgSimilarityPostTitle']
 
 features = pd.DataFrame(columns=cols)
 
 for index, row in instances.iterrows():
     features_dict = {}
     print("processing " + str(index) + " out of " + str(instances.shape[0]) + ": " + row['postText'][0])
-    features_dict['id'] = row['id']
-    char_based_features(row, features_dict)
-    if index == 4:
-        print("mannaccia la chiesa")
-        print("porcoddi")
+    features_dict['id'] = str(row['id'])
+    # char_based_features(row, features_dict)
     features_dict['avgSimilarityPostTitle'] = avg_similarity(row['postText'][0])
-    features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
-    features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
-    capital_plus_nwords = count_capital(row['postText'][0])
-    features_dict['capitalPostTitle'] = capital_plus_nwords[0]
-    features_dict['numWords'] = capital_plus_nwords[1]
-    features_dict['commonPhrase'] = common(row['postText'][0])
-
+    # features_dict['avgWordLenPostTitle'] = avg_word_length(row['postText'][0])
+    # features_dict['avgWordLenArticleTitle'] = avg_word_length(row['targetTitle'])
+    # capital_plus_nwords = count_capital(row['postText'][0])
+    # features_dict['capitalPostTitle'] = capital_plus_nwords[0]
+    # features_dict['numWords'] = capital_plus_nwords[1]
+    # features_dict['commonPhrase'] = common(row['postText'][0])
     features = features.append(features_dict, ignore_index=True)
 
-features.to_csv("./matteo_features.csv", index=False)
-print("mannaccia il cristo appeso")
+features.to_csv("./matteo_full_similarity.csv", index=False)
 print(features)
 
 # click_det = 0
