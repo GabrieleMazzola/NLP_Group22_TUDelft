@@ -16,9 +16,8 @@ DATASET = 'big'  # 'big' or 'small'
 PATH_TO_FEATURE_FOLDER = "../features/"
 
 feature_paths = []
-feature_paths.append(('POS postText normalized', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_normalized.csv".format(DATASET, DATASET)))
+feature_paths.append(('POS postText no-normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_no-normalized_infoGain70.0.csv".format(DATASET, DATASET)))
 # alone -> 66.8 % log reg
-
 feature_paths.append(('POS targetTitle normalized', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET)))
 # alone -> 62.7 % log reg
 # POS together -> 67.3%
@@ -36,9 +35,11 @@ feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_feat
 feature_paths.append(("Bianca features", PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(DATASET)))
 # alone -> 68.7% logreg
 
+feature_paths.append(("Ngrams", "../features/big/ngrams_features_counts_after_infoGain1.0.csv"))
 
 data_df = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
-                                "../train_set/truth_converted_{}.pickle".format(DATASET))[['id', 'truthClass']]
+                                "../train_set/truth_converted_{}.pickle".format(DATASET))
+data_df = data_df[['id', 'truthClass', 'truthMedian']]
 print(f"Labeled instances loaded. Shape: {data_df.shape}. Only 'id' and 'truthClass' kept.")
 
 for feat_name, feat_path in feature_paths:
@@ -46,9 +47,11 @@ for feat_name, feat_path in feature_paths:
     print(f"Loading features: {feat_name}")
     feat_data = pd.read_csv(feat_path)
     print(f"Obtained {feat_data.shape[1] - 1} feature columns")
+
     feat_data['id'] = feat_data['id'].astype(str)
 
     print(f"Merging them with the original dataframe")
+
     if feat_name == 'Matteo features':
         data_df = pd.concat([data_df, feat_data.drop('id', 1)], 1)
     else:
@@ -65,7 +68,9 @@ print(f"Labels encoded. Class '{data_df['truthClass'][0]}' --> label '{label_enc
 label_encoded = pd.DataFrame(label_encoded, columns=['label'])
 print("-------------\n")
 
-data_df = data_df.drop(['id', 'truthClass'], 1)
+medians = data_df['truthMedian']
+
+data_df = data_df.drop(['id', 'truthClass', 'truthMedian'], 1)
 print(f"'id' and 'truthClass' dropped. Final shape of the feature dataframe: {data_df.shape}")
 print(f"Columns : {list(data_df.columns)}")
 
@@ -100,8 +105,8 @@ param_svm = {'C': [1, 10, 100, 1000],
              }
 
 models = []
-models.append(("Random forest ", RandomForestClassifier(n_estimators=50, max_depth=100), param_randForest))
-#models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
+models.append(("Random forest ", RandomForestClassifier(n_estimators=100, max_depth=200), param_randForest))
+models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
 # models.append(("SVM", svm.SVC(), param_svm))
 
 
@@ -124,27 +129,26 @@ for model_name, model, model_params in models:
     accuracies = []
     recalls = []
     f1s = []
+    mses = []
     for train_index, test_index in skf.split(eval_df, label_encoded):
 
         X_train, X_test = eval_df.loc[train_index], eval_df.loc[test_index]
         y_train, y_test = label_encoded.loc[train_index], label_encoded.loc[test_index]
+        y_medians = medians.loc[test_index]
 
         model.fit(X_train, y_train.values.ravel())
-        y_pred = model.predict(X_test)
-        precision = precision_score(y_test, y_pred)
+        y_pred_hard = model.predict(X_test)
+        y_pred_soft = model.predict_proba(X_test)[:, 1]
+        precision = precision_score(y_test, y_pred_hard)
         precisions.append(precision)
-        accuracies.append(accuracy_score(y_test, y_pred))
-        recalls.append(recall_score(y_test, y_pred))
-        f1s.append(f1_score(y_test, y_pred))
+        accuracies.append(accuracy_score(y_test, y_pred_hard))
+        recalls.append(recall_score(y_test, y_pred_hard))
+        f1s.append(f1_score(y_test, y_pred_hard))
+        mses.append(mean_squared_error(y_medians, y_pred_soft))
 
     print(model_name)
     print("acc", np.mean(accuracies), np.std(accuracies))
     print("prec", np.mean(precisions), np.std(precisions))
     print("rec", np.mean(recalls), np.std(recalls))
     print("f1", np.mean(f1s), np.std(f1s))
-
-# 73.5
-# adding POS targetTitle: 75.5 {'criterion': 'entropy', 'max_depth': 150, 'max_features': 'log2', 'n_estimators': 500}
-# adding Matteo features: 78.8% {'criterion': 'entropy', 'max_depth': 100, 'max_features': 'log2', 'n_estimators': 500}
-# adding Bianca's features -> no change
-# adding avg Similarity: 78.8% -> no change
+    print("mse", np.mean(mses), np.std(mses))

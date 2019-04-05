@@ -37,30 +37,32 @@ for ngram in all_ngrams:
 
 
 labeled_instances = get_labeled_instances("../train_set/instances_converted_big.pickle",
-                                          "../train_set/truth_converted_big.pickle")[['truthClass', 'postText']]
+                                          "../train_set/truth_converted_big.pickle")[['truthClass', 'postText', 'id']]
 
-# postTexts = list(labeled_instances.postText)
-# dict_list = []
-# for idx, post_text in enumerate(postTexts):
-#     print(idx)
-#     post_text = post_text[0]
-#     post_dict = {x: 0 for x in filtered_ngrams.keys()}
-#
-#     ngrams = get_all_ngrams_for_post(post_text)
-#     for ngram in ngrams:
-#         if ngram in post_dict:
-#             post_dict[ngram] += 1
-#
-#     dict_list.append(post_dict)
-#
-# print("Loop done, building the dataframe...")
-# feat_df = pd.DataFrame(dict_list)
-# print(feat_df.shape)
-# print("DONE. Saving...")
-# feat_df.to_csv("./ngrams_features_counts_before_infoGain.csv", index=False)
+postTexts = list(labeled_instances.postText)
+ids = list(labeled_instances.id)
+dict_list = []
+for idx, post_text in enumerate(postTexts):
+    print(idx)
+    post_text = post_text[0]
+    post_dict = {x: 0 for x in filtered_ngrams.keys()}
+    post_dict['id'] = ids[idx]
+    ngrams = get_all_ngrams_for_post(post_text)
+    for ngram in ngrams:
+        if ngram in post_dict:
+            post_dict[ngram] += 1
+
+    dict_list.append(post_dict)
+
+print("Loop done, building the dataframe...")
+feat_df = pd.DataFrame(dict_list)
+print(feat_df.shape)
+print("DONE. Saving...")
+feat_df.to_csv("./ngrams_features_counts_before_infoGain.csv", index=False)
 
 print("Loading csv...")
 feat_df = pd.read_csv("./ngrams_features_counts_before_infoGain.csv")
+feat_df['id'] = labeled_instances['id']
 
 le = preprocessing.LabelEncoder()
 label_encoded = le.fit_transform(labeled_instances['truthClass'])
