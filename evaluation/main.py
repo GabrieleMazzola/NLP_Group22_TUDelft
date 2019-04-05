@@ -9,7 +9,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score, mean_squared_error, \
     confusion_matrix
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.naive_bayes import GaussianNB
 
 from gabry_dataset_parser import get_labeled_instances
 
@@ -83,7 +84,7 @@ if CHECK_RANDOM:
     eval_df = pd.DataFrame(data=random_feat)
 
 param_randForest = {
-    'n_estimators': [400],
+    'n_estimators': [100, 200, 400],
     'max_depth': [100, 125, 150, 175, 200],
     'max_features': ['auto', 'sqrt', 'log2'],
     'criterion': ['gini', 'entropy']
@@ -91,7 +92,6 @@ param_randForest = {
 
 param_logisticReg = {
     'penalty': ['l1', 'l2'],
-    #'C': np.logspace(-3, 3, 7)
 }
 
 param_svm = {'C': [1, 10, 100, 1000],
@@ -99,9 +99,11 @@ param_svm = {'C': [1, 10, 100, 1000],
              'gamma': ['auto', 'scale']
              }
 
+
 models = []
-models.append(("Random forest ", RandomForestClassifier(n_estimators=100, max_depth=200), param_randForest))
+models.append(("Random forest ", RandomForestClassifier(), param_randForest))
 models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
+models.append(("Bayes ", GaussianNB, {}))
 # models.append(("SVM", svm.SVC(), param_svm))
 
 
@@ -111,13 +113,15 @@ print(f"'{eval_metric}' is being used as evaluation metric")
 # Split in train (which we use for Grid Search) and test
 X_train, X_test, y_train, y_test = train_test_split(eval_df, label_encoded, test_size=0.2, random_state=42)
 
-# results = []
-# for model in models:
-#     clf = GridSearchCV(model[1], model[2], cv=5, scoring=eval_metric)
-#     clf.fit(X_train, y_train.values.ravel())
-#     res = clf.cv_results_
-#     results.append(res)
-#     print(clf.best_params_, clf.best_score_)
+results = []
+for model in models:
+    clf = GridSearchCV(model[1], model[2], cv=5, scoring=eval_metric)
+    clf.fit(X_train, y_train.values.ravel())
+    res = clf.cv_results_
+    results.append(res)
+    print(model[0])
+    print(clf.best_params_, clf.best_score_)
+    print("\n\n")
 
 
 # for model_name, model, model_params in models:
@@ -151,44 +155,44 @@ X_train, X_test, y_train, y_test = train_test_split(eval_df, label_encoded, test
 #     print("mse", np.mean(mses), np.std(mses))
 
 
-print("\n\n----------------- Final test ----------------------")
-for model_name, model, model_params in models:
-    print(f"using model {model_name}")
-
-    y_medians = medians.loc[pd.Series(y_test.index)]
-
-    model.fit(X_train, y_train.values.ravel())
-    y_pred_hard = model.predict(X_test)
-    y_pred_soft = model.predict_proba(X_test)[:, 1] # keep only probabilities of being clickbait
-
-    precision = precision_score(y_test, y_pred_hard)
-    accuracy = accuracy_score(y_test, y_pred_hard)
-    recall = recall_score(y_test, y_pred_hard)
-    f1 = f1_score(y_test, y_pred_hard)
-    mse = mean_squared_error(y_medians, y_pred_soft)
-
-    print("acc", accuracy)
-    print("prec", precision)
-    print("rec", recall)
-    print("f1", f1)
-    print("mse", mse)
-
-    labels = [0, 1]
-    cm = confusion_matrix(y_test, y_pred_hard, labels)
-    print(cm)
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    cax = ax.matshow(cm)
-    plt.title('Confusion matrix of the classifier {}'.format(model_name))
-    fig.colorbar(cax)
-    ax.set_xticklabels([''] + labels)
-    ax.set_yticklabels([''] + labels)
-    plt.xlabel('Predicted')
-    plt.ylabel('True')
-    plt.show()
-
-    df_cm = pd.DataFrame(cm, index=[i for i in ['true: no-clickbait', 'true: clickbait']],
-                         columns=[i for i in ['pred: no-clickbait', 'pred: clickbait']])
-    plt.figure(figsize=(10, 7))
-    sn.heatmap(df_cm, annot=True, fmt='.1f')
-    plt.show()
+# print("\n\n----------------- Final test ----------------------")
+# for model_name, model, model_params in models:
+#     print(f"using model {model_name}")
+#
+#     y_medians = medians.loc[pd.Series(y_test.index)]
+#
+#     model.fit(X_train, y_train.values.ravel())
+#     y_pred_hard = model.predict(X_test)
+#     y_pred_soft = model.predict_proba(X_test)[:, 1] # keep only probabilities of being clickbait
+#
+#     precision = precision_score(y_test, y_pred_hard)
+#     accuracy = accuracy_score(y_test, y_pred_hard)
+#     recall = recall_score(y_test, y_pred_hard)
+#     f1 = f1_score(y_test, y_pred_hard)
+#     mse = mean_squared_error(y_medians, y_pred_soft)
+#
+#     print("acc", accuracy)
+#     print("prec", precision)
+#     print("rec", recall)
+#     print("f1", f1)
+#     print("mse", mse)
+#
+#     labels = [0, 1]
+#     cm = confusion_matrix(y_test, y_pred_hard, labels)
+#     print(cm)
+#     fig = plt.figure()
+#     ax = fig.add_subplot(111)
+#     cax = ax.matshow(cm)
+#     plt.title('Confusion matrix of the classifier {}'.format(model_name))
+#     fig.colorbar(cax)
+#     ax.set_xticklabels([''] + labels)
+#     ax.set_yticklabels([''] + labels)
+#     plt.xlabel('Predicted')
+#     plt.ylabel('True')
+#     plt.show()
+#
+#     df_cm = pd.DataFrame(cm, index=[i for i in ['true: no-clickbait', 'true: clickbait']],
+#                          columns=[i for i in ['pred: no-clickbait', 'pred: clickbait']])
+#     plt.figure(figsize=(10, 7))
+#     sn.heatmap(df_cm, annot=True, fmt='.1f')
+#     plt.show()
