@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sn
-from sklearn import preprocessing
-from sklearn.ensemble import RandomForestClassifier
+from sklearn import preprocessing, svm
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score, mean_squared_error, \
     confusion_matrix
@@ -99,29 +99,34 @@ param_svm = {'C': [1, 10, 100, 1000],
              'gamma': ['auto', 'scale']
              }
 
+param_ada = {
+ 'n_estimators': [50, 100, 150],
+ 'learning_rate' : [0.01,0.05,0.1,0.3,1],
+ }
 
 models = []
-models.append(("Random forest ", RandomForestClassifier(), param_randForest))
-models.append(("Logistic ", LogisticRegression(solver='liblinear'), param_logisticReg))
-models.append(("Bayes ", GaussianNB, {}))
-# models.append(("SVM", svm.SVC(), param_svm))
+models.append(("Random forest ", RandomForestClassifier(criterion='entropy', max_depth=125, max_features='log2', n_estimators=400), param_randForest))
+models.append(("Logistic ", LogisticRegression(solver='liblinear', penalty='l1'), param_logisticReg))
+models.append(("Bayes ", GaussianNB(), {}))
+models.append(("AdaBoost", AdaBoostClassifier(learning_rate=0.01, n_estimators=400), param_ada))
+models.append(("SVM", svm.SVC(), param_svm))
 
-
-eval_metric = 'precision'
-print(f"'{eval_metric}' is being used as evaluation metric")
 
 # Split in train (which we use for Grid Search) and test
 X_train, X_test, y_train, y_test = train_test_split(eval_df, label_encoded, test_size=0.2, random_state=42)
 
-results = []
-for model in models:
-    clf = GridSearchCV(model[1], model[2], cv=5, scoring=eval_metric)
-    clf.fit(X_train, y_train.values.ravel())
-    res = clf.cv_results_
-    results.append(res)
-    print(model[0])
-    print(clf.best_params_, clf.best_score_)
-    print("\n\n")
+model = models[4]
+
+print("\n\nPerforming GRIDSEARCH on train+val set...")
+eval_metric = 'precision'
+print(f"'{eval_metric}' is being used as evaluation metric")
+clf = GridSearchCV(model[1], model[2], cv=5, scoring=eval_metric)
+clf.fit(X_train, y_train.values.ravel())
+res = clf.cv_results_
+print(model[0])
+print(res)
+print(clf.best_params_, clf.best_score_)
+print("\n\n")
 
 
 # for model_name, model, model_params in models:
@@ -154,12 +159,12 @@ for model in models:
 #     print("f1", np.mean(f1s), np.std(f1s))
 #     print("mse", np.mean(mses), np.std(mses))
 
-
+#
 # print("\n\n----------------- Final test ----------------------")
+# y_medians = medians.loc[pd.Series(y_test.index)]
+#
 # for model_name, model, model_params in models:
 #     print(f"using model {model_name}")
-#
-#     y_medians = medians.loc[pd.Series(y_test.index)]
 #
 #     model.fit(X_train, y_train.values.ravel())
 #     y_pred_hard = model.predict(X_test)
@@ -179,20 +184,39 @@ for model in models:
 #
 #     labels = [0, 1]
 #     cm = confusion_matrix(y_test, y_pred_hard, labels)
-#     print(cm)
-#     fig = plt.figure()
-#     ax = fig.add_subplot(111)
-#     cax = ax.matshow(cm)
-#     plt.title('Confusion matrix of the classifier {}'.format(model_name))
-#     fig.colorbar(cax)
-#     ax.set_xticklabels([''] + labels)
-#     ax.set_yticklabels([''] + labels)
-#     plt.xlabel('Predicted')
-#     plt.ylabel('True')
-#     plt.show()
 #
-#     df_cm = pd.DataFrame(cm, index=[i for i in ['true: no-clickbait', 'true: clickbait']],
-#                          columns=[i for i in ['pred: no-clickbait', 'pred: clickbait']])
-#     plt.figure(figsize=(10, 7))
-#     sn.heatmap(df_cm, annot=True, fmt='.1f')
+#     # df_cm = pd.DataFrame(cm, index=[i for i in ['true: no-clickbait', 'true: clickbait']],
+#     #                      columns=[i for i in ['pred: no-clickbait', 'pred: clickbait']])
+#     # plt.figure(figsize=(10, 7))
+#     # plt.title(model_name)
+#     # sn.heatmap(df_cm, annot=True, fmt='.1f')
+#     # print("\n\n")
+#
+#     classes = ["no click", "click"]
+#     print(cm)
+#     fig, ax = plt.subplots()
+#     im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+#     ax.figure.colorbar(im, ax=ax)
+#     # We want to show all ticks...
+#     ax.set(xticks=np.arange(cm.shape[1]),
+#            yticks=np.arange(cm.shape[0]),
+#            xticklabels=classes, yticklabels=classes,
+#            title=model_name,
+#            ylabel='True label',
+#            xlabel='Predicted label')
+#
+#     # Rotate the tick labels and set their alignment.
+#     plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+#              rotation_mode="anchor")
+#
+#     # Loop over data dimensions and create text annotations.
+#     fmt = '.2f'
+#     thresh = cm.max() / 2.
+#     for i in range(cm.shape[0]):
+#         for j in range(cm.shape[1]):
+#             ax.text(j, i, format(cm[i, j], fmt),
+#                     ha="center", va="center",
+#                     color="white" if cm[i, j] > thresh else "black")
+#     fig.tight_layout()
+#
 #     plt.show()
