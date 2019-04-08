@@ -5,7 +5,7 @@ from gabry_dataset_parser import get_labeled_instances
 
 DATASET = 'big'
 
-path = "../features/{}/pos_features_{}_postText_no-normalized{}.csv"
+path = "../features/{}/pos_features_{}_targetTitle_normalized{}.csv"
 POS_FEAT_PATH = path.format(DATASET, DATASET, "")
 feat_data = pd.read_csv(POS_FEAT_PATH)
 
