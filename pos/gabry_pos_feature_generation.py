@@ -41,12 +41,12 @@ if __name__ == '__main__':
     # TODO: small targetTitle normalized      --> Done
     # TODO: small targetTitle no-normalized   --> Done
     # TODO: big postText    normalized      --> Done
-    # TODO: big postText    no-normalized   --> Running
+    # TODO: big postText    no-normalized   --> Done
     # TODO: big targetTitle normalized      --> Done
-    # TODO: big targetTitle no-normalized   --> TODO
+    # TODO: big targetTitle no-normalized   --> Running
 
     DATASET = 'big'  # 'small' or 'big'
-    target = "postText"  # "postText" or "targetTitle"
+    target = "targetTitle"  # "postText" or "targetTitle"
     prefix = "PT" if target == "postText" else "TA"
     NORMALIZE = False
 

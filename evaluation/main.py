@@ -18,13 +18,13 @@ DATASET = 'big'  # 'big' or 'small'
 PATH_TO_FEATURE_FOLDER = "../features/"
 
 feature_paths = []
-#feature_paths.append(('POS postText no-normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_no-normalized_infoGain70.0.csv".format(DATASET, DATASET)))
+feature_paths.append(('POS postText no-normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_no-normalized_infoGain70.0.csv".format(DATASET, DATASET)))
 
-#feature_paths.append(('POS targetTitle normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized_infoGain70.0.csv".format(DATASET, DATASET)))
+feature_paths.append(('POS targetTitle normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized_infoGain70.0.csv".format(DATASET, DATASET)))
 
 
-# feature_paths.append(("Formal postText normalized",  PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_postText_normalized.csv".format(DATASET, DATASET))) # useless
-# feature_paths.append(("Formal targetTitle normalized",PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET))) # useless
+feature_paths.append(("Formal postText normalized",  PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_postText_normalized.csv".format(DATASET, DATASET))) # useless
+feature_paths.append(("Formal targetTitle normalized",PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET))) # useless
 
 #feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(DATASET)))
 

@@ -26,14 +26,14 @@ feature_paths.append(('POS targetTitle normalized pruned', PATH_TO_FEATURE_FOLDE
 feature_paths.append(("Formal postText normalized",  PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_postText_normalized.csv".format(DATASET, DATASET))) # useless
 feature_paths.append(("Formal targetTitle normalized",PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET))) # useless
 
-feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(DATASET)))
+#feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(DATASET)))
 
 
 feature_paths.append(("Similarity lin", PATH_TO_FEATURE_FOLDER + "{}/matteo_full_similarity.csv".format(DATASET)))
 
-feature_paths.append(("Bianca features", PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(DATASET)))
+#feature_paths.append(("Bianca features", PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(DATASET)))
 
-feature_paths.append(("Ngrams", "../features/big/ngrams_features_counts_after_infoGain1.0.csv"))
+#feature_paths.append(("Ngrams", "../features/big/ngrams_features_counts_after_infoGain1.0.csv"))
 
 data_df = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
                                 "../train_set/truth_converted_{}.pickle".format(DATASET))
@@ -58,6 +58,12 @@ for feat_name, feat_path in feature_paths:
 
     print("-------------\n")
 
+df_clickbait = data_df[data_df['truthClass'] == 'clickbait']
+df_nonclickbait = data_df[data_df['truthClass'] == 'no-clickbait']
+df_nonclickbait = df_nonclickbait.head(df_clickbait.shape[0])
+data_df = pd.concat([df_clickbait, df_nonclickbait], 0)
+
+
 print("\n-------------\nEncoding labels.")
 le = preprocessing.LabelEncoder()
 label_encoded = le.fit_transform(data_df['truthClass'])
@@ -67,18 +73,9 @@ label_encoded = pd.DataFrame(label_encoded, columns=['label'])
 print("-------------\n")
 
 
-model = RandomForestClassifier(criterion='entropy', max_depth=125, max_features='log2', n_estimators=400)
-
-# Split in train (which we use for Grid Search) and test
-X_train_with_ID, X_test_with_ID, y_train, y_test = train_test_split(data_df, label_encoded, test_size=0.2, random_state=42)
 
 means = data_df['truthMean']
-y_means = means.loc[pd.Series(y_test.index)]
-
 data_df = data_df.drop(['id', 'truthClass', 'truthMean'], 1)
-X_test = X_test_with_ID.drop(['id', 'truthClass', 'truthMean'], 1)
-X_train = X_train_with_ID.drop(['id', 'truthClass', 'truthMean'], 1)
-
 print(f"'id' and 'truthClass' dropped. Final shape of the feature dataframe: {data_df.shape}")
 print(f"Columns : {list(data_df.columns)}")
 
@@ -88,6 +85,24 @@ eval_df = data_df.copy()
 
 
 
+model = RandomForestClassifier(criterion='entropy', max_depth=125, max_features='log2', n_estimators=400)
+#models.append(("Logistic ", LogisticRegression(solver='liblinear', penalty='l1'), param_logisticReg))
+#models.append(("Bayes ", GaussianNB(), {}))
+#models.append(("AdaBoost", AdaBoostClassifier(learning_rate=0.001, n_estimators=700), param_ada))
+#models.append(("SVM", svm.SVC(), param_svm))
+
+
+# Split in train (which we use for Grid Search) and test
+X_train, X_test, y_train, y_test = train_test_split(eval_df, label_encoded, test_size=0.2, random_state=42)
+
+# y_test_clickbait = y_test[y_test.label == 1]
+# y_test_nonclickbait = y_test[y_test.label == 0]
+# y_test_nonclickbait = y_test_nonclickbait.head(len(y_test_clickbait))
+# y_test = pd.concat([y_test_clickbait, y_test_nonclickbait], 0)
+#
+# X_test_clickbait = X_test.loc[y_test_clickbait.index]
+# X_test_nonclickbait = X_test.loc[y_test_nonclickbait.index]
+# X_test = pd.concat([X_test_clickbait, X_test_nonclickbait], 0)
 
 model.fit(X_train, y_train.values.ravel())
 y_pred = model.predict(X_test)
@@ -102,14 +117,41 @@ print("prec", precision)
 print("rec", recall)
 print("f1", f1)
 
-y_test['pred'] = y_pred
-misclassified = y_test[y_test['label'] != y_test['pred']]
-misclassified_with_features = X_test_with_ID.loc[misclassified.index]
+labels = [0, 1]
+cm = confusion_matrix(y_test, y_pred, labels)
 
-data_df = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
-                                "../train_set/truth_converted_{}.pickle".format(DATASET))
+# df_cm = pd.DataFrame(cm, index=[i for i in ['true: no-clickbait', 'true: clickbait']],
+#                      columns=[i for i in ['pred: no-clickbait', 'pred: clickbait']])
+# plt.figure(figsize=(10, 7))
+# plt.title(model_name)
+# sn.heatmap(df_cm, annot=True, fmt='.1f')
+# print("\n\n")
 
-misclassified_data_with_features = pd.merge(misclassified_with_features, data_df, on='id')
-print("saving")
-misclassified_data_with_features.to_csv("./miscl_with_feat.csv", index=False)
-print()
+classes = ["no click", "click"]
+print(cm)
+fig, ax = plt.subplots()
+im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+ax.figure.colorbar(im, ax=ax)
+# We want to show all ticks...
+ax.set(xticks=np.arange(cm.shape[1]),
+       yticks=np.arange(cm.shape[0]),
+       xticklabels=classes, yticklabels=classes,
+       title='Random Forest',
+       ylabel='True label',
+       xlabel='Predicted label')
+
+# Rotate the tick labels and set their alignment.
+plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+         rotation_mode="anchor")
+
+# Loop over data dimensions and create text annotations.
+fmt = '.2f'
+thresh = cm.max() / 2.
+for i in range(cm.shape[0]):
+    for j in range(cm.shape[1]):
+        ax.text(j, i, format(cm[i, j], fmt),
+                ha="center", va="center",
+                color="white" if cm[i, j] > thresh else "black")
+fig.tight_layout()
+
+plt.show()
