@@ -18,22 +18,22 @@ DATASET = 'big'  # 'big' or 'small'
 PATH_TO_FEATURE_FOLDER = "../features/"
 
 feature_paths = []
-feature_paths.append(('POS postText no-normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_no-normalized_infoGain70.0.csv".format(DATASET, DATASET)))
+#feature_paths.append(('POS postText no-normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_postText_no-normalized_infoGain70.0.csv".format(DATASET, DATASET)))
 
-feature_paths.append(('POS targetTitle normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized_infoGain70.0.csv".format(DATASET, DATASET)))
+#feature_paths.append(('POS targetTitle normalized pruned', PATH_TO_FEATURE_FOLDER + "{}/pos_features_{}_targetTitle_normalized_infoGain70.0.csv".format(DATASET, DATASET)))
 
 
 # feature_paths.append(("Formal postText normalized",  PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_postText_normalized.csv".format(DATASET, DATASET))) # useless
 # feature_paths.append(("Formal targetTitle normalized",PATH_TO_FEATURE_FOLDER + "{}/formal_informal_features_{}_targetTitle_normalized.csv".format(DATASET, DATASET))) # useless
 
-feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(DATASET)))
+#feature_paths.append(("Matteo features",PATH_TO_FEATURE_FOLDER + "{}/matteo_features_full.csv".format(DATASET)))
 
 
-# feature_paths.append(("Similarity lin", PATH_TO_FEATURE_FOLDER + "{}/matteo_full_similarity.csv".format(DATASET)))
+feature_paths.append(("Similarity lin", PATH_TO_FEATURE_FOLDER + "{}/matteo_full_similarity.csv".format(DATASET)))
 
-feature_paths.append(("Bianca features", PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(DATASET)))
+#feature_paths.append(("Bianca features", PATH_TO_FEATURE_FOLDER + "{}/bianca_features.csv".format(DATASET)))
 
-feature_paths.append(("Ngrams", "../features/big/ngrams_features_counts_after_infoGain1.0.csv"))
+#feature_paths.append(("Ngrams", "../features/big/ngrams_features_counts_after_infoGain1.0.csv"))
 
 data_df = get_labeled_instances("../train_set/instances_converted_{}.pickle".format(DATASET),
                                 "../train_set/truth_converted_{}.pickle".format(DATASET))
@@ -104,9 +104,9 @@ param_ada = {
 
 models = []
 models.append(("Random forest ", RandomForestClassifier(criterion='entropy', max_depth=125, max_features='log2', n_estimators=400), param_randForest))
-models.append(("Logistic ", LogisticRegression(solver='liblinear', penalty='l1'), param_logisticReg))
-models.append(("Bayes ", GaussianNB(), {}))
-models.append(("AdaBoost", AdaBoostClassifier(learning_rate=0.01, n_estimators=400), param_ada))
+#models.append(("Logistic ", LogisticRegression(solver='liblinear', penalty='l1'), param_logisticReg))
+#models.append(("Bayes ", GaussianNB(), {}))
+#models.append(("AdaBoost", AdaBoostClassifier(learning_rate=0.001, n_estimators=700), param_ada))
 #models.append(("SVM", svm.SVC(), param_svm))
 
 
